@@ -12,6 +12,10 @@ struct Velocity {
     double x, y;
 };
 
+struct Crap {
+    int foo[1000]; // meant to mess up the cache by taking up useless space
+};
+
 int main() {
     std::cout << "Hello, World!" << std::endl;
 //    std::vector<float> noiseOutput(16 * 16 * 16);
@@ -32,7 +36,7 @@ int main() {
     flecs::log::set_level(10);
     #endif
 
-    ecs.set_threads(16);
+    ecs.set_threads(4);
 
     ecs.system<Position, const Velocity>()
 //        .interval(1)
@@ -60,10 +64,12 @@ int main() {
 
 
 
-    for (int i = 0; i < 1000000; ++i) {
+    for (int i = 0; i < 100000; ++i) {
         ecs.entity()
                 .set<Position>({0, 0})
-                .set<Velocity>({1, 1});
+                .set<Velocity>({1, 1})
+                .set<Crap>({0});
+
     }
 //
 //
@@ -76,7 +82,7 @@ int main() {
     typedef std::chrono::high_resolution_clock Clock;
     auto t1 = Clock::now();
 
-    for (int i = 0; i < 10000; ++i) {
+    for (int i = 0; i < 100000; ++i) {
         ecs.progress();
     }
 

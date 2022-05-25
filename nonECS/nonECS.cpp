@@ -13,13 +13,13 @@ struct Velocity {
 };
 
 struct Crap {
-    int foo[10000] = {0}; // meant to mess up the cache by taking up useless space
+    int foo[1000] = {0}; // meant to mess up the cache by taking up useless space
 };
 
 struct Entity {
     Position pos;
     Velocity vel;
-    Crap crap;
+//    Crap crap;
 };
 
 void move_system(std::vector<Entity>& ents) {
@@ -34,11 +34,11 @@ int main() {
 
     std::vector<Entity> entities;
 
-    for (int i = 0; i < 1000000; ++i) {
+    for (int i = 0; i < 100000; ++i) {
         Position pos {0, 0};
         Velocity vel {1, 1};
-        Crap crap;
-        Entity ent {pos, vel, crap};
+//        Crap crap;
+        Entity ent {pos, vel};
         entities.emplace_back(ent);
     }
 
@@ -49,7 +49,7 @@ int main() {
     typedef std::chrono::high_resolution_clock Clock;
     auto t1 = Clock::now();
 
-    for (int i = 0; i < 10000; ++i) {
+    for (int i = 0; i < 100000; ++i) {
         move_system(entities);
     }
 
