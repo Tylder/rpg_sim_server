@@ -21,12 +21,45 @@ add_executable(
         main.cpp
 )
 
+add_executable(
+        non_ecs
+        nonECS/nonECS.cpp
+)
+
 ## FASTNOISE2
 set(FASTNOISE2_NOISETOOL OFF CACHE BOOL "Build Noise Tool" FORCE) #example if don't need the graph tool
 add_subdirectory(./extern/FastNoise2)
 
 ## FLECS
 set(FLECS_STATIC_LIBS ON)
+
+if(CMAKE_BUILD_TYPE EQUAL DEBUG)
+    add_compile_definitions(FLECS_DEBUG)
+endif()
+
+add_compile_definitions(
+        FLECS_CUSTOM_BUILD
+        FLECS_CPP
+        FLECS_MODULE
+        FLECS_PARSER
+        FLECS_PLECS
+        FLECS_RULES
+        FLECS_SNAPSHOT
+        FLECS_STATS
+        FLECS_SYSTEM
+        FLECS_PIPELINE
+        FLECS_TIMER
+        FLECS_META
+        FLECS_META_C
+        FLECS_UNITS
+        FLECS_EXPR
+        FLECS_JSON
+        FLECS_DOC
+        FLECS_COREDOC
+        FLECS_LOG
+        FLECS_APP
+        FLECS_OS_API_IMPL
+)
 add_subdirectory(./extern/flecs)
 
 target_link_libraries(rpg_sim_server PUBLIC FastNoise flecs_static)

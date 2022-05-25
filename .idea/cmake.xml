@@ -2,7 +2,8 @@
 <project version="4">
   <component name="CMakeSharedSettings">
     <configurations>
-      <configuration PROFILE_NAME="Release MingW Clang Basic" ENABLED="true" CONFIG_NAME="Debug" GENERATION_OPTIONS="-G Ninja -DLLVM_ENABLE_PROJECTS=&quot;clang;clang-tools-extra;compiler-rt;lld&quot; -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -DLLVM_USE_LINKER=lld -DCMAKE_LINKER=lld -DHAVE_CXX_ATOMICS64_WITHOUT_LIB=1 -DHAVE_CXX_ATOMICS_WITHOUT_LIB=1" />
+      <configuration PROFILE_NAME="Release MingW Clang Basic" ENABLED="true" CONFIG_NAME="Release" TOOLCHAIN_NAME="MinGW Clang" GENERATION_OPTIONS="-G Ninja -DLLVM_ENABLE_PROJECTS=&quot;clang;clang-tools-extra;compiler-rt;lld&quot; -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -DLLVM_USE_LINKER=lld -DCMAKE_LINKER=lld -DHAVE_CXX_ATOMICS64_WITHOUT_LIB=1 -DHAVE_CXX_ATOMICS_WITHOUT_LIB=1" />
+      <configuration PROFILE_NAME="Debug MingW Clang Basic" ENABLED="true" CONFIG_NAME="Debug" TOOLCHAIN_NAME="MinGW Clang" GENERATION_OPTIONS="-G Ninja -DLLVM_ENABLE_PROJECTS=&quot;clang;clang-tools-extra;compiler-rt;lld&quot; -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -DLLVM_USE_LINKER=lld -DCMAKE_LINKER=lld -DHAVE_CXX_ATOMICS64_WITHOUT_LIB=1 -DHAVE_CXX_ATOMICS_WITHOUT_LIB=1" />
     </configurations>
   </component>
 </project>
