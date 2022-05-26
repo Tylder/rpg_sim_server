@@ -40,7 +40,7 @@ int main() {
 
     ecs.system<Position, const Velocity>()
 //        .interval(1)
-        .multi_threaded(true)
+        .multi_threaded(false)
         .iter([](const flecs::iter& it,Position *p,const Velocity *v){
             for (auto row : it) {
                     p[row].x += v[row].x;
@@ -64,7 +64,7 @@ int main() {
 
 
 
-    for (int i = 0; i < 100000; ++i) {
+    for (int i = 0; i < 10000; ++i) {
         ecs.entity()
                 .set<Position>({0, 0})
                 .set<Velocity>({1, 1})
@@ -82,7 +82,7 @@ int main() {
     typedef std::chrono::high_resolution_clock Clock;
     auto t1 = Clock::now();
 
-    for (int i = 0; i < 100000; ++i) {
+    for (int i = 0; i < 1000000; ++i) {
         ecs.progress();
     }
 
@@ -93,7 +93,8 @@ int main() {
 //    }
 
     auto t2 = Clock::now();
-    std::cout << t2-t1 << '\n';
+    std::chrono::duration<double, std::milli> fp_ms = t2 - t1;
+    std::cout << fp_ms << '\n';
 
     return 0;
 }

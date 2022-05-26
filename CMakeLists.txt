@@ -3,7 +3,7 @@ project(rpg_sim_server
         VERSION 0.0.1
         LANGUAGES C CXX)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -Wall")
 
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
@@ -26,6 +26,11 @@ add_executable(
         nonECS/nonECS.cpp
 )
 
+add_executable(
+        examples
+        examples/speedComp.cpp
+)
+
 ## FASTNOISE2
 set(FASTNOISE2_NOISETOOL OFF CACHE BOOL "Build Noise Tool" FORCE) #example if don't need the graph tool
 add_subdirectory(./extern/FastNoise2)
@@ -33,9 +38,9 @@ add_subdirectory(./extern/FastNoise2)
 ## FLECS
 set(FLECS_STATIC_LIBS ON)
 
-if(CMAKE_BUILD_TYPE EQUAL DEBUG)
+if (CMAKE_BUILD_TYPE EQUAL DEBUG)
     add_compile_definitions(FLECS_DEBUG)
-endif()
+endif ()
 
 add_compile_definitions(
         FLECS_CUSTOM_BUILD
@@ -62,4 +67,11 @@ add_compile_definitions(
 )
 add_subdirectory(./extern/flecs)
 
+### CSV PARSER ###
+add_subdirectory(./extern/csv-parser)
+set(CSV_INCLUDE_DIR ${DEPENDENCIES_DIR}/csv-parser/include)
+include_directories(${CSV_INCLUDE_DIR})
+### END OF CSV PARSER ###
+
 target_link_libraries(rpg_sim_server PUBLIC FastNoise flecs_static)
+target_link_libraries(examples PUBLIC FastNoise flecs_static csv)
