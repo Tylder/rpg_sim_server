@@ -17,27 +17,27 @@ using iter_t = ecs_iter_t;
 using ComponentLifecycle = EcsComponentLifecycle;
 
 enum inout_kind_t {
-    InOutDefault = EcsInOutDefault,
-    InOutFilter = EcsInOutFilter,
-    InOut = EcsInOut,
-    In = EcsIn,
-    Out = EcsOut
+  InOutDefault = EcsInOutDefault,
+  InOutFilter = EcsInOutFilter,
+  InOut = EcsInOut,
+  In = EcsIn,
+  Out = EcsOut
 };
 
 enum oper_kind_t {
-    And = EcsAnd,
-    Or = EcsOr,
-    Not = EcsNot,
-    Optional = EcsOptional,
-    AndFrom = EcsAndFrom,
-    OrFrom = EcsOrFrom,
-    NotFrom = EcsNotFrom
+  And = EcsAnd,
+  Or = EcsOr,
+  Not = EcsNot,
+  Optional = EcsOptional,
+  AndFrom = EcsAndFrom,
+  OrFrom = EcsOrFrom,
+  NotFrom = EcsNotFrom
 };
 
 enum var_kind_t {
-    VarDefault = EcsVarDefault,
-    VarIsEntity = EcsVarIsEntity,
-    VarIsVariable = EcsVarIsVariable
+  VarDefault = EcsVarDefault,
+  VarIsEntity = EcsVarIsEntity,
+  VarIsVariable = EcsVarIsVariable
 };
 
 ////////////////////////////////////////////////////////////////////////////////

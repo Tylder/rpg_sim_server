@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.22)
 project(rpg_sim_server
         VERSION 0.0.1
-        LANGUAGES C CXX)
+        LANGUAGES CXX C)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -Wall")
@@ -12,6 +12,7 @@ set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0")
 set(DEPENDENCIES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/extern)
 set(INC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 set(TEST_DIR ${CMAKE_CURRENT_LIST_DIR}/tests)
+set(FLECS_MODULE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/flecs_modules)
 
 include_directories(${INC_DIR})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
@@ -30,6 +31,21 @@ add_executable(
         examples
         examples/speedComp.cpp
 )
+
+add_library(flecs_transform STATIC
+        ${FLECS_MODULE_DIR}/transform/components.cpp
+        ${FLECS_MODULE_DIR}/transform/systems.cpp)
+
+target_link_libraries(flecs_transform PUBLIC flecs_static)
+
+add_library(flecs_module_landscape STATIC
+        ${FLECS_MODULE_DIR}/landscape/components.cpp
+        ${FLECS_MODULE_DIR}/landscape/systems.cpp)
+
+target_link_libraries(flecs_module_landscape PUBLIC FastNoise flecs_static flecs_transform)
+
+## Specifying that is CPP
+set_target_properties(flecs_transform flecs_module_landscape PROPERTIES LINKER_LANGUAGE CXX)
 
 ## FASTNOISE2
 set(FASTNOISE2_NOISETOOL OFF CACHE BOOL "Build Noise Tool" FORCE) #example if don't need the graph tool
@@ -64,6 +80,8 @@ add_compile_definitions(
         FLECS_LOG
         FLECS_APP
         FLECS_OS_API_IMPL
+        #        FLECS_HTTP
+        #        FLECS_REST
 )
 add_subdirectory(./extern/flecs)
 
@@ -73,5 +91,12 @@ set(CSV_INCLUDE_DIR ${DEPENDENCIES_DIR}/csv-parser/include)
 include_directories(${CSV_INCLUDE_DIR})
 ### END OF CSV PARSER ###
 
-target_link_libraries(rpg_sim_server PUBLIC FastNoise flecs_static)
+
+target_link_libraries(rpg_sim_server PUBLIC
+        FastNoise
+        flecs_static
+        flecs_module_landscape
+        flecs_transform
+        )
+
 target_link_libraries(examples PUBLIC FastNoise flecs_static csv)
