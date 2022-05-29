@@ -40,6 +40,7 @@ target_link_libraries(flecs_transform PUBLIC flecs_static)
 
 add_library(flecs_landscape STATIC
         ${FLECS_MODULE_DIR}/landscape/components.cpp
+        ${FLECS_MODULE_DIR}/landscape/inits.cpp
         ${FLECS_MODULE_DIR}/landscape/systems.cpp)
 
 target_link_libraries(flecs_landscape PUBLIC FastNoise flecs_static flecs_transform)
@@ -84,12 +85,12 @@ add_compile_definitions(
         #        FLECS_REST
 )
 add_subdirectory(./extern/flecs)
-
-### CSV PARSER ###
-add_subdirectory(./extern/csv-parser)
-set(CSV_INCLUDE_DIR ${DEPENDENCIES_DIR}/csv-parser/include)
-include_directories(${CSV_INCLUDE_DIR})
-### END OF CSV PARSER ###
+#
+#### CSV PARSER ###
+#add_subdirectory(./extern/csv-parser)
+#set(CSV_INCLUDE_DIR ${DEPENDENCIES_DIR}/csv-parser/include)
+#include_directories(${CSV_INCLUDE_DIR})
+#### END OF CSV PARSER ###
 
 
 target_link_libraries(rpg_sim_server PUBLIC
@@ -99,4 +100,5 @@ target_link_libraries(rpg_sim_server PUBLIC
         flecs_transform
         )
 
-target_link_libraries(examples PUBLIC FastNoise flecs_static csv)
+#target_link_libraries(examples PUBLIC FastNoise flecs_static csv)
+target_link_libraries(examples PUBLIC FastNoise flecs_static)
