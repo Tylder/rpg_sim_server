@@ -1,6 +1,6 @@
 #include <chrono>
 #include <iostream>
-
+#include "nlohmann/json.hpp"
 #include "FastNoise/FastNoise.h"
 #include "flecs.h"
 #include "flecs_modules/landscape/components.cpp"
@@ -31,23 +31,27 @@ int main() {
   flecs::log::set_level(10);
 #endif
   flecs::world ecs;
+  ecs.import <Transform::Componets>();
+  ecs.import <Tile::Components>();
   ecs.import <Landscape::Components>();
   ecs.import <Landscape::Systems>();
-  ecs.import <Transform::Componets>();
   ecs.import <Transform::Systems>();
   //    ecs.app().enable_rest().run();
 
   ecs.set_threads(4);
 
-  Landscape::addLandscapeTile(ecs, 2, 2);
+  Landscape::Inits landscapeInits {ecs};
 
-  auto qTile = ecs.query<const Landscape::LandscapeTile, Transform::Position2<int32_t>, Landscape::Neighbours8>();
+  Landscape::createLandscapeTiles(ecs, landscapeInits.landscapeTileBase, "LandscapeTile", 3, 3);
+
+  auto qTile = ecs.query<const Landscape::LandscapeTile, const Transform::Position2<int32_t>, const Tile::Neighbours8>();
 
   flecs::iter_to_json_desc_t descIter = {};
   descIter.serialize_entities = true;
   descIter.serialize_values = true;
 
-  std::cout << qTile.iter().to_json(&descIter).c_str() << "\n";
+  auto queryJson = nlohmann::json::parse(qTile.iter().to_json(&descIter).c_str());
+  std::cout <<  queryJson.dump(2) << std::endl;
   //
   //  auto e = flecs::entity(ecs, 999)
   //      .set<Transform::Position2<int32_t>>({4, 11})

@@ -7,10 +7,7 @@
 
 #include "FastNoise/FastNoise.h"
 #include "flecs.h"
-#include <iostream>
 #include <vector>
-#include "flecs_modules/transform/components.cpp"
-#include "flecs_modules/landscape/components.cpp"
 
 namespace Landscape {
 
