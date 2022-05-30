@@ -26,10 +26,22 @@ add_executable(
         nonECS/nonECS.cpp
 )
 
+add_library(speedTable STATIC
+        ${INC_DIR}/SpeedTable/SpeedTable.cpp)
+
 add_executable(
-        examples
-        examples/speedComp.cpp
+        speedTableRun
+        ${INC_DIR}/SpeedTable/main.cpp
 )
+
+## EXAMPLES
+add_library(examples_lib STATIC
+        examples/speedComp.cpp)
+
+add_executable(examples
+        examples/main.cpp
+        )
+## EXAMPLES -- END
 
 ## FASTNOISE2
 set(FASTNOISE2_NOISETOOL OFF CACHE BOOL "Build Noise Tool" FORCE) #example if don't need the graph tool
@@ -72,6 +84,7 @@ add_subdirectory(./extern/csv-parser)
 set(CSV_INCLUDE_DIR ${DEPENDENCIES_DIR}/csv-parser/include)
 include_directories(${CSV_INCLUDE_DIR})
 ### END OF CSV PARSER ###
-
+target_link_libraries(speedTable PUBLIC FastNoise flecs_static csv)
+target_link_libraries(speedTableRun PUBLIC speedTable)
+target_link_libraries(examples PUBLIC FastNoise flecs_static csv examples_lib speedTable)
 target_link_libraries(rpg_sim_server PUBLIC FastNoise flecs_static)
-target_link_libraries(examples PUBLIC FastNoise flecs_static csv)
