@@ -46,7 +46,7 @@ struct Inits {
 
       groundTileBase = ecsWorld.prefab()
                             .add<Tile::Tile>()
-                            .add<Groun  dTile>()
+                            .add<GroundTile>()
                             .set<Transform::Size2<>>({1.0, 1.0}) // hard coded size
                             .override<Tile::Neighbours8>()
                             .override<Transform::Position2<>>()
