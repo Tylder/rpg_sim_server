@@ -27,10 +27,22 @@ add_executable(
         nonECS/nonECS.cpp
 )
 
+add_library(speedTable STATIC
+        ${INC_DIR}/SpeedTable/SpeedTable.cpp)
+
 add_executable(
-        examples
-        examples/speedComp.cpp
+        speedTableRun
+        ${INC_DIR}/SpeedTable/main.cpp
 )
+
+## EXAMPLES
+add_library(examples_lib STATIC
+        examples/speedComp.cpp)
+
+add_executable(examples
+        examples/main.cpp
+        )
+## EXAMPLES -- END
 
 ## FASTNOISE2 - FastNoise
 set(FASTNOISE2_NOISETOOL OFF CACHE BOOL "Build Noise Tool" FORCE) #example if don't need the graph tool
