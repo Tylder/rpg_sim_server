@@ -89,9 +89,14 @@ add_library(flecs_landscape STATIC
 
 target_link_libraries(flecs_landscape PUBLIC FastNoise flecs_static flecs_transform flecs_tile flecs_net)
 
+add_library(map STATIC
+        ${INC_DIR}/map/Map.cpp
+        ${INC_DIR}/map/Map.cpp)
+
+target_link_libraries(flecs_landscape PUBLIC FastNoise flecs_static flecs_transform flecs_tile flecs_net)
+
 ## Specifying that is CPP
 set_target_properties(flecs_transform flecs_landscape PROPERTIES LINKER_LANGUAGE CXX)
-
 
 if (CMAKE_BUILD_TYPE EQUAL DEBUG)
     add_compile_definitions(FLECS_DEBUG)
@@ -132,6 +137,7 @@ target_link_libraries(rpg_sim_server PUBLIC
         flecs_static
         flecs_landscape
         flecs_transform
+        map
 )
 
 #target_link_libraries(examples PUBLIC FastNoise flecs_static csv)

@@ -4,10 +4,12 @@
 #include "FastNoise/FastNoise.h"
 #include "flecs.h"
 #include "flecs_modules/landscape/components.cpp"
+#include "flecs_modules/net/components.cpp"
 #include "flecs_modules/landscape/inits.cpp"
 #include "flecs_modules/landscape/systems.cpp"
 #include "flecs_modules/transform/components.cpp"
 #include "flecs_modules/transform/systems.cpp"
+#include "flecs_modules/tile/systems.cpp"
 
 struct Position {
   float x;
@@ -34,8 +36,11 @@ int main() {
   ecs.import <Transform::Componets>();
   ecs.import <Tile::Components>();
   ecs.import <Landscape::Components>();
-  ecs.import <Landscape::Systems>();
+  ecs.import <Net::Components>();
+
   ecs.import <Transform::Systems>();
+  ecs.import <Landscape::Systems>();
+  ecs.import <Tile::Systems>();
   //    ecs.app().enable_rest().run();
 
   ecs.set_threads(4);

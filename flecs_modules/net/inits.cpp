@@ -6,6 +6,7 @@
 #define RPG_SIM_SERVER_NET_INITS_H
 
 #include "flecs.h"
+#include "flecs_modules/net/components.cpp"
 
 namespace Net {
 
