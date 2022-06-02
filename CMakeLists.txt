@@ -78,6 +78,7 @@ target_link_libraries(flecs_transform PUBLIC flecs_static)
 add_library(flecs_tile STATIC
         ${FLECS_MODULE_DIR}/tile/components.cpp
         ${FLECS_MODULE_DIR}/tile/inits.cpp
+        ${FLECS_MODULE_DIR}/tile/helpers.cpp
         ${FLECS_MODULE_DIR}/tile/systems.cpp)
 
 target_link_libraries(flecs_tile PUBLIC flecs_static flecs_transform)
@@ -138,7 +139,7 @@ target_link_libraries(rpg_sim_server PUBLIC
         flecs_landscape
         flecs_transform
         map
-)
+        )
 
 #target_link_libraries(examples PUBLIC FastNoise flecs_static csv)
 target_link_libraries(examples PUBLIC FastNoise flecs_static)

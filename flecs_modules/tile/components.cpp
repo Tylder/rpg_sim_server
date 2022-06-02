@@ -9,15 +9,26 @@
 
 namespace Tile {
 
+//struct Neighbours8 {
+//  flecs::entity_view top{};
+//  flecs::entity_view topRight{};
+//  flecs::entity_view right{};
+//  flecs::entity_view bottomRight{};
+//  flecs::entity_view bottom{};
+//  flecs::entity_view bottomLeft{};
+//  flecs::entity_view left{};
+//  flecs::entity_view topLeft{};
+//};
+
 struct Neighbours8 {
-  const flecs::entity_view *top;
-  const flecs::entity_view *topRight;
-  const flecs::entity_view *right;
-  const flecs::entity_view *bottomRight;
-  const flecs::entity_view *bottom;
-  const flecs::entity_view *bottomLeft;
-  const flecs::entity_view *left;
-  const flecs::entity_view *topLeft;
+  flecs::entity_t top;
+  flecs::entity_t topRight;
+  flecs::entity_t right;
+  flecs::entity_t bottomRight;
+  flecs::entity_t bottom;
+  flecs::entity_t bottomLeft;
+  flecs::entity_t left;
+  flecs::entity_t topLeft;
 };
 
 struct Tile {};
@@ -50,12 +61,11 @@ struct Components {
         .member(flecs::Entity, "left")
         .member(flecs::Entity, "topLeft");
 
-//    auto landscapeTileBase = ecsWorld.entity()
-//        .add<Tile>()
-//        .set<Transform::Size2<>>({1.0, 1.0});
-
+    //    auto landscapeTileBase = ecsWorld.entity()
+    //        .add<Tile>()
+    //        .set<Transform::Size2<>>({1.0, 1.0});
   }
 };
-}
+}// namespace Tile
 
-#endif // RPG_SIM_SERVER_TILE_COMPONENTS_H
+#endif// RPG_SIM_SERVER_TILE_COMPONENTS_H

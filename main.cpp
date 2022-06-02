@@ -1,15 +1,15 @@
-#include <chrono>
-#include <iostream>
-#include "nlohmann/json.hpp"
 #include "FastNoise/FastNoise.h"
 #include "flecs.h"
 #include "flecs_modules/landscape/components.cpp"
-#include "flecs_modules/net/components.cpp"
 #include "flecs_modules/landscape/inits.cpp"
 #include "flecs_modules/landscape/systems.cpp"
+#include "flecs_modules/net/components.cpp"
+#include "flecs_modules/tile/systems.cpp"
 #include "flecs_modules/transform/components.cpp"
 #include "flecs_modules/transform/systems.cpp"
-#include "flecs_modules/tile/systems.cpp"
+#include "nlohmann/json.hpp"
+#include <chrono>
+#include <iostream>
 
 struct Position {
   float x;
@@ -45,18 +45,42 @@ int main() {
 
   ecs.set_threads(4);
 
-  Landscape::Inits landscapeInits {ecs};
+  Landscape::Inits landscapeInits{ecs};
 
-  Landscape::createLandscapeTiles(ecs, landscapeInits.landscapeTileBase, "LandscapeTile", 3, 3);
+  Landscape::createLandscapeTiles(ecs, landscapeInits.landscapeTileBase, "LandscapeTile", 2, 1);
 
-  auto qTile = ecs.query<const Landscape::LandscapeTile, const Transform::Position2<int32_t>, const Tile::Neighbours8>();
+  auto qTile = ecs.query<
+      const Landscape::LandscapeTile,
+      const Transform::Position2<int32_t>,
+      Tile::Neighbours8>();
+
+  qTile.iter([](flecs::iter &it,
+                const Landscape::LandscapeTile *t,
+                const Transform::Position2<int32_t> *p,
+                Tile::Neighbours8 *n) {
+    for (auto i : it) {
+      auto e = it.entity(i);
+      std::cout << e.name() << ": {" << p[i].x << ", " << p[i].y << "}, id: " << e.id() << "\n";
+
+      auto n_t = n[i];
+
+      if (n_t.right) {
+        //        auto p_top = n_t.right.get<Transform::Position2<int32_t>>();
+        //        std::cout << "Neighbour RIGHT: ";
+        //        std::cout << n_t.right.name() << ": {" << p_top->x << ", " << p_top->y << "}, id: " << n_t.right.id() << "\n";
+      }
+    }
+  });
 
   flecs::iter_to_json_desc_t descIter = {};
   descIter.serialize_entities = true;
   descIter.serialize_values = true;
 
-  auto queryJson = nlohmann::json::parse(qTile.iter().to_json(&descIter).c_str());
-  std::cout <<  queryJson.dump(2) << std::endl;
+  auto json = qTile.iter().to_json(&descIter).c_str();
+
+  auto queryJson = nlohmann::json::parse(json);
+  std::cout << queryJson.dump(2) << std::endl;
+  std::cout << "" << std::endl;
   //
   //  auto e = flecs::entity(ecs, 999)
   //      .set<Transform::Position2<int32_t>>({4, 11})
