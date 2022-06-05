@@ -31,9 +31,9 @@ struct Neighbours8 {
   flecs::entity_t topLeft;
 };
 
-struct ConnectedNode {};
+struct ConnectedNode {};// links to other tiles that are connected somehow;
 struct NeighbourNode {
-//  NeighbourTypeEnum type;
+  //  NeighbourTypeEnum type;
   flecs::entity_t node;
 };
 
@@ -71,25 +71,24 @@ struct Components {
 
     ecsWorld.component<ConnectedNode>("ConnectedNode");
 
-    ecsWorld.component<NeighbourTypeEnum>()
-        .constant("Top", Top)
-        .constant("TopRight", TopRight)
-        .constant("Right", Right)
-        .constant("BottomRight", BottomRight)
-        .constant("Bottom", Bottom)
-        .constant("BottomLeft", BottomLeft)
-        .constant("Left", Left)
-        .constant("TopLeft", TopLeft);
+    //    ecsWorld.component<NeighbourTypeEnum>()
+    //        .constant("Top", Top)
+    //        .constant("TopRight", TopRight)
+    //        .constant("Right", Right)
+    //        .constant("BottomRight", BottomRight)
+    //        .constant("Bottom", Bottom)
+    //        .constant("BottomLeft", BottomLeft)
+    //        .constant("Left", Left)
+    //        .constant("TopLeft", TopLeft);
 
     ecsWorld.component<NeighbourNode>("NeighbourNode")
-//        .member<NeighbourTypeEnum>("type")
+        //        .member<NeighbourTypeEnum>("type")
         .member(flecs::Entity, "node")
         .is_a<ConnectedNode>();
 
-
-//    ecsWorld.component<NeighbourRight>("NeighbourRight")
-//        .is_a<NeighbourTile>()
-//        .add(flecs::Exclusive);
+    //    ecsWorld.component<NeighbourRight>("NeighbourRight")
+    //        .is_a<NeighbourTile>()
+    //        .add(flecs::Exclusive);
 
     //    auto landscapeTileBase = ecsWorld.entity()
     //        .add<Tile>()

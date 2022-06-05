@@ -86,7 +86,7 @@ target_link_libraries(flecs_tile PUBLIC flecs_static flecs_transform)
 #### LANDSCAPE
 add_library(flecs_landscape STATIC
         ${FLECS_MODULE_DIR}/landscape/components.cpp
-        ${FLECS_MODULE_DIR}/landscape/inits.cpp
+        ${FLECS_MODULE_DIR}/landscape/init.cpp
         ${FLECS_MODULE_DIR}/landscape/systems.cpp)
 
 target_link_libraries(flecs_landscape PUBLIC FastNoise flecs_static flecs_transform flecs_tile flecs_net)
@@ -94,7 +94,7 @@ target_link_libraries(flecs_landscape PUBLIC FastNoise flecs_static flecs_transf
 #### GROUND TILES
 add_library(flecs_landscape_ground STATIC
         ${FLECS_MODULE_DIR}/landscape/ground/components.cpp
-        ${FLECS_MODULE_DIR}/landscape/ground/inits.cpp
+        ${FLECS_MODULE_DIR}/landscape/ground/init.cpp
         ${FLECS_MODULE_DIR}/landscape/ground/systems.cpp)
 
 target_link_libraries(flecs_landscape_ground PUBLIC flecs_landscape)

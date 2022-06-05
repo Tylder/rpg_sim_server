@@ -14,9 +14,9 @@
 
 namespace Landscape {
 
-flecs::entity map;
-flecs::entity landscapeTileBase_Prefab;
-flecs::query<const LandscapeTile, const Tile::Index, const Tile::Index2> landscapeTilesBasicQuery;
+static flecs::entity map;
+static flecs::entity landscapeTileBase_Prefab;
+static flecs::query<const LandscapeTile, const Tile::Index, const Tile::Index2> landscapeTilesBasicQuery;
 
 void createLandscapeTiles(flecs::world &ecsWorld, const flecs::entity &prefab, const std::string &baseName, size_t width, size_t height) {
   Tile::createTilesWith8Neighbours(ecsWorld, prefab, baseName, width, height);

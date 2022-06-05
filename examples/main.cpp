@@ -15,12 +15,12 @@ struct Direction {};
 struct DirectionUp : Direction {};
 struct DirectionDown : Direction {};
 
-enum class DirectionEnum {
-  Up = 0,
-  Down = 1,
-  Right = 2,
-  Left = 3
-};
+//enum class DirectionEnum {
+//  Up = 0,
+//  Down = 1,
+//  Right = 2,
+//  Left = 3
+//};
 
 int main() {
 
@@ -75,26 +75,25 @@ int main() {
 
   std::cout << "e2's type: [" << e2.type().str() << "]\n";
 
-//  auto pair = ecs.pair<flecs::IsA | Direction>(flecs::Wildcard);
+  //  auto pair = ecs.pair<flecs::IsA | Direction>(flecs::Wildcard);
 
   std::cout << "e2 type: " << e2.type().str() << std::endl;
 
-//  auto q2 = ecs.query_builder().term<DirectionUp>(flecs::Wildcard).build();
+  //  auto q2 = ecs.query_builder().term<DirectionUp>(flecs::Wildcard).build();
   auto q2 = ecs.query_builder<>()
-                .term<DirectionUp>().obj(flecs::Wildcard)
+                .term<DirectionUp>()
+                .obj(flecs::Wildcard)
                 .build();
 
-
   // Create a rule to find all ranged units
-//  auto rule1 = ecs.rule<>();
-//
-//  // Iterate the rule
-//  rule1.each([](flecs::entity e, Direction) {
-//    std::cout << "Rule " << e.name() << " found\n";
-//  });
+  //  auto rule1 = ecs.rule<>();
+  //
+  //  // Iterate the rule
+  //  rule1.each([](flecs::entity e, Direction) {
+  //    std::cout << "Rule " << e.name() << " found\n";
+  //  });
 
-  q2.iter([](flecs::iter &it){
-
+  q2.iter([](flecs::iter &it) {
     auto pair1 = it.pair(1).first().type().str();
     auto pair2 = it.pair(1).second().type().str();
 
@@ -123,8 +122,7 @@ int main() {
 
   auto q3 = ecs.query_builder().term(NeighbourUpE).set(flecs::Wildcard).build();
 
-  q3.iter([](flecs::iter &it){
-
+  q3.iter([](flecs::iter &it) {
     auto pair1 = it.pair(1).first().type().str();
     auto pair2 = it.pair(1).second().type().str();
 
