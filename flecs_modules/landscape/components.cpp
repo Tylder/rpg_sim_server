@@ -12,17 +12,14 @@ namespace Landscape {
 
 struct Map {};
 struct LandscapeTile {}; // base type
-struct GroundTile {}; //
 
 struct Components {
   Components(flecs::world &ecsWorld) {
     ecsWorld.module<Components>();
 
     ecsWorld.component<Map>().add<Map>(); //  singleton
-//    map = ecsWorld.entity<Map>();
 
     ecsWorld.component<LandscapeTile>().is_a<Tile::Tile>();
-    ecsWorld.component<GroundTile>().is_a<Tile::Tile>();
 
   }
 };

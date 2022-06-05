@@ -9,16 +9,16 @@
 
 namespace Tile {
 
-//struct Neighbours8 {
-//  flecs::entity_view top{};
-//  flecs::entity_view topRight{};
-//  flecs::entity_view right{};
-//  flecs::entity_view bottomRight{};
-//  flecs::entity_view bottom{};
-//  flecs::entity_view bottomLeft{};
-//  flecs::entity_view left{};
-//  flecs::entity_view topLeft{};
-//};
+enum NeighbourTypeEnum {
+  Top,
+  TopRight,
+  Right,
+  BottomRight,
+  Bottom,
+  BottomLeft,
+  Left,
+  TopLeft,
+};
 
 struct Neighbours8 {
   flecs::entity_t top;
@@ -31,16 +31,24 @@ struct Neighbours8 {
   flecs::entity_t topLeft;
 };
 
+struct ConnectedNode {};
+struct NeighbourNode {
+//  NeighbourTypeEnum type;
+  flecs::entity_t node;
+};
+
 struct Tile {};
 
 struct Index {
   int32_t value;
 };
+
 struct Index2 {
   int32_t x, y;
 };
 
 struct Components {
+
   Components(flecs::world &ecsWorld) {
     ecsWorld.module<Components>();
 
@@ -60,6 +68,28 @@ struct Components {
         .member(flecs::Entity, "bottomLeft")
         .member(flecs::Entity, "left")
         .member(flecs::Entity, "topLeft");
+
+    ecsWorld.component<ConnectedNode>("ConnectedNode");
+
+    ecsWorld.component<NeighbourTypeEnum>()
+        .constant("Top", Top)
+        .constant("TopRight", TopRight)
+        .constant("Right", Right)
+        .constant("BottomRight", BottomRight)
+        .constant("Bottom", Bottom)
+        .constant("BottomLeft", BottomLeft)
+        .constant("Left", Left)
+        .constant("TopLeft", TopLeft);
+
+    ecsWorld.component<NeighbourNode>("NeighbourNode")
+//        .member<NeighbourTypeEnum>("type")
+        .member(flecs::Entity, "node")
+        .is_a<ConnectedNode>();
+
+
+//    ecsWorld.component<NeighbourRight>("NeighbourRight")
+//        .is_a<NeighbourTile>()
+//        .add(flecs::Exclusive);
 
     //    auto landscapeTileBase = ecsWorld.entity()
     //        .add<Tile>()

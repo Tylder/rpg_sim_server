@@ -1,8 +1,12 @@
 #include "FastNoise/FastNoise.h"
 #include "flecs.h"
 #include "flecs_modules/landscape/components.cpp"
-#include "flecs_modules/landscape/inits.cpp"
+#include "flecs_modules/landscape/init.cpp"
 #include "flecs_modules/landscape/systems.cpp"
+
+#include "flecs_modules/landscape/ground/components.cpp"
+#include "flecs_modules/landscape/ground/init.cpp"
+#include "flecs_modules/landscape/ground/systems.cpp"
 #include "flecs_modules/net/components.cpp"
 #include "flecs_modules/tile/systems.cpp"
 #include "flecs_modules/transform/components.cpp"
@@ -36,6 +40,7 @@ int main() {
   ecs.import <Transform::Componets>();
   ecs.import <Tile::Components>();
   ecs.import <Landscape::Components>();
+  ecs.import <Landscape::Ground::Components>();
   ecs.import <Net::Components>();
 
   ecs.import <Transform::Systems>();
@@ -47,40 +52,118 @@ int main() {
 
   Landscape::Inits landscapeInits{ecs};
 
-  Landscape::createLandscapeTiles(ecs, landscapeInits.landscapeTileBase, "LandscapeTile", 2, 1);
+//  Landscape::createLandscapeTiles(ecs, landscapeInits.landscapeTileBase, "LandscapeTile", 3, 1);
+  //  auto qTile = ecs.query<
+  //      const Landscape::LandscapeTile,
+  //      const Transform::Position2<int32_t>,
+  //      Tile::NeighbourTile,
+  //      Tile::Neighbours8>();
 
-  auto qTile = ecs.query<
-      const Landscape::LandscapeTile,
-      const Transform::Position2<int32_t>,
-      Tile::Neighbours8>();
+  auto qTile = ecs.query_builder<>().term<Tile::NeighbourTypeEnum>(flecs::Wildcard).build();
+      //                      const Tile::NeighbourNode
+      //      const Tile::ConnectedNode,
+      //                      Tile::Neighbours8
 
-  qTile.iter([](flecs::iter &it,
-                const Landscape::LandscapeTile *t,
-                const Transform::Position2<int32_t> *p,
-                Tile::Neighbours8 *n) {
-    for (auto i : it) {
-      auto e = it.entity(i);
-      std::cout << e.name() << ": {" << p[i].x << ", " << p[i].y << "}, id: " << e.id() << "\n";
+  auto NTile = ecs.query_builder<>()
+      .term<Tile::ConnectedNode>(flecs::Wildcard).build();
 
-      auto n_t = n[i];
+  NTile.iter([](flecs::iter &it) {
+    auto pair1 = it.pair(1).first().name();
+    auto pair2 = it.pair(1).second().name();
 
-      if (n_t.right) {
-        //        auto p_top = n_t.right.get<Transform::Position2<int32_t>>();
-        //        std::cout << "Neighbour RIGHT: ";
-        //        std::cout << n_t.right.name() << ": {" << p_top->x << ", " << p_top->y << "}, id: " << n_t.right.id() << "\n";
-      }
-    }
+    std::cout << "sdsd";
   });
 
-  flecs::iter_to_json_desc_t descIter = {};
-  descIter.serialize_entities = true;
-  descIter.serialize_values = true;
+  auto N2Tile = ecs.query_builder<Tile::NeighbourNode>().build();
+  //  auto N2Tile  = ecs.query<Tile::NeighbourTile>();
 
-  auto json = qTile.iter().to_json(&descIter).c_str();
+  N2Tile.iter([](flecs::iter &it, Tile::NeighbourNode *t) {
+    //    auto pair1 = it.pair(1).first().name();
+    //    auto pair2 = it.pair(1).second().name();
 
-  auto queryJson = nlohmann::json::parse(json);
-  std::cout << queryJson.dump(2) << std::endl;
-  std::cout << "" << std::endl;
+    std::cout << "sdsd";
+  });
+  //
+  //  auto N2Tile  = ecs.query_builder<>().term<Tile::NeighbourNode>(flecs::Wildcard).build();
+  ////  auto N2Tile  = ecs.query<Tile::NeighbourTile>();
+  //
+  //  N2Tile.iter([](flecs::iter &it) {
+  //
+  //    auto pair1 = it.pair(1).first().name();
+  //    auto pair2 = it.pair(1).second().name();
+  //
+  //
+  //    std::cout << "sdsd";
+  //  });
+
+  qTile.iter([](flecs::iter &it) {
+    //                const Tile::NeighbourTile *nT,
+    //                const Tile::ConnectedNode *cN,
+    //                  Tile::Neighbours8 *n) {
+
+    auto pair1 = it.pair(1).first().name();
+    auto pair2 = it.pair(1).second().name();
+
+    for (auto i : it) {
+      std::cout << "sdsd";
+    }
+////      it.entity(i).each<Tile::NeighbourNode>([](flecs::entity second) {
+////        std::cout << "sdsd";
+////      });
+//
+//
+//
+//    }
+  });
+
+  //  qTile.iter([](flecs::iter &it,
+  //                const Landscape::LandscapeTile *t,
+  //                const Transform::Position2<int32_t> *p,
+  //                //                const Tile::NeighbourTile *nT,
+  //                //                const Tile::ConnectedNode *cN,
+  //                Tile::Neighbours8 *n) {
+  //    for (auto i : it) {
+  //      auto e = it.entity(i);
+  //      auto hasNT = e.has<Tile::ConnectedNode>();
+  //
+  //      std::cout << e.name() << ": {" << p[i].x << ", " << p[i].y << "}, id: " << e.id() << "\n";
+  //
+  //      auto n_t = n[i];
+  //
+  //      e.each<Tile::ConnectedNode>([](flecs::entity &cn) {
+  //        std::cout << cn.name() << std::endl;
+  //      });
+  //
+  //      flecs::entity_to_json_desc_t descEnt = {};
+  //      descEnt.serialize_values = true;
+  //      //    descEnt.serialize_base = true;
+  //      //    descEnt.serialize_brief = true;
+  //      //    descEnt.serialize_hidden = true;
+  //      //    descEnt.serialize_label = true;
+  //      //    descEnt.serialize_link = true;
+  //      //    descEnt.serialize_path = true;
+  //      //    descEnt.serialize_type_info = true;
+  //      //    auto j = std::string(tile.to_json(&descEnt).c_str());
+  //
+  //      auto jsonE = std::string(e.to_json(&descEnt).c_str());
+  //
+  //      if (n_t.right) {
+  //        //        auto p_top = n_t.right.get<Transform::Position2<int32_t>>();
+  //        //        std::cout << "Neighbour RIGHT: ";
+  //        //        std::cout << n_t.right.name() << ": {" << p_top->x << ", " << p_top->y << "}, id: " << n_t.right.id() << "\n";
+  //      }
+  //    }
+  //  });
+
+  //  flecs::iter_to_json_desc_t descIter = {};
+  //  descIter.serialize_entities = true;
+  //  descIter.serialize_values = true;
+  //
+  //  auto json = qTile.iter().to_json(&descIter).c_str();
+
+  //  auto queryJson = nlohmann::json::parse(json);
+  //  std::cout << queryJson.dump(2) << std::endl;
+  //  std::cout << "" << std::endl;
   //
   //  auto e = flecs::entity(ecs, 999)
   //      .set<Transform::Position2<int32_t>>({4, 11})

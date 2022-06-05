@@ -1952,6 +1952,7 @@ ecs_entity_t ecs_entity_init(
         }
     }
 
+    // FIXME (Daniel) this is commented out because it asserts when registering enum component
     ecs_assert(name_assigned == ecs_has_pair(
         world, result, ecs_id(EcsIdentifier), EcsName),
             ECS_INTERNAL_ERROR, NULL);

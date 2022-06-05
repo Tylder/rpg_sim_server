@@ -8,13 +8,70 @@
 #include "flecs.h"
 #include "flecs_modules/tile/components.cpp"
 #include "flecs_modules/transform/components.cpp"
+#include <cassert>
 #include <iostream>
 #include <vector>
-#include <cassert>
 
-#define assertm(exp, msg) assert(((void)msg, exp))
+#define assertm(exp, msg) assert(((void) msg, exp))
 
 namespace Tile {
+
+void setNeighbourNode(flecs::entity &node, NeighbourTypeEnum type, flecs::entity_view neighbourNode, Neighbours8 &neighbours) {
+
+//  node.set<NeighbourNode>({type, neighbourNode});
+//  node.set<NeighbourNode, NeighbourTypeEnum::Right>({neighbourNode});
+  node.add<ConnectedNode>(neighbourNode);
+
+  switch (type) {
+    case (Top): {
+      node.add(NeighbourTypeEnum::Top, neighbourNode);
+      neighbours.top = neighbourNode;
+      break;
+    }
+    case TopRight: {
+      node.add(NeighbourTypeEnum::TopRight, neighbourNode);
+//      node.set<NeighbourNode, NeighbourTypeEnum::TopRight>({neighbourNode});
+      neighbours.topRight = neighbourNode;
+      break;
+    }
+    case Right: {
+      node.add(NeighbourTypeEnum::Right, neighbourNode);
+//      node.set<NeighbourNode, NeighbourTypeEnum::Right>({neighbourNode});
+      neighbours.right = neighbourNode;
+      break;
+    }
+    case BottomRight: {
+      node.add(NeighbourTypeEnum::BottomRight, neighbourNode);
+//      node.set<NeighbourNode, NeighbourTypeEnum::BottomRight>({neighbourNode});
+      neighbours.bottomRight = neighbourNode;
+      break;
+    }
+    case Bottom: {
+      node.add(NeighbourTypeEnum::Bottom, neighbourNode);
+//      node.set<NeighbourNode, NeighbourTypeEnum::Bottom>({neighbourNode});
+      neighbours.bottom = neighbourNode;
+      break;
+    }
+    case BottomLeft: {
+      node.add(NeighbourTypeEnum::BottomLeft, neighbourNode);
+      node.set<NeighbourNode, NeighbourTypeEnum::BottomLeft>({neighbourNode});
+      neighbours.bottomLeft = neighbourNode;
+      break;
+    }
+    case Left: {
+      node.add(NeighbourTypeEnum::Left, neighbourNode);
+//      node.set<NeighbourNode, NeighbourTypeEnum::Left>({neighbourNode});
+      neighbours.left = neighbourNode;
+      break;
+    }
+    case TopLeft: {
+      node.add(NeighbourTypeEnum::TopLeft, neighbourNode);
+//      node.set<NeighbourNode, NeighbourTypeEnum::TopLeft>({neighbourNode});
+      neighbours.topLeft = neighbourNode;
+      break;
+    }
+  }
+}
 
 void createTilesWith8Neighbours(flecs::world &ecsWorld, const flecs::entity &prefab,
                                 const std::string &baseName, size_t width, size_t height) {
@@ -26,15 +83,14 @@ void createTilesWith8Neighbours(flecs::world &ecsWorld, const flecs::entity &pre
   std::vector<flecs::entity_view> tiles{};
   tiles.reserve(height * width);
 
-  auto size = prefab.get<Transform::Size2<>>();  // prefab should have size set
+  auto size = prefab.get<Transform::Size2<>>();// prefab should have size set
 
   assertm(size != nullptr, "No Transform::Size2<> set on Tile prefab");
 
-  int32_t i {0};
+  int32_t i{0};
 
   for (int32_t y = 0; y < height; y++) {
     for (int32_t x = 0; x < width; x++) {
-
 
       std::string name = baseName + " - x: " + std::to_string(x) + ", y: " + std::to_string(y);
 
@@ -44,7 +100,7 @@ void createTilesWith8Neighbours(flecs::world &ecsWorld, const flecs::entity &pre
                    .set<Index2>({x, y})
                    .set<Transform::Position2<int32_t>>({static_cast<int>(x * size->x), static_cast<int>(y * size->y)});
 
-//      tiles.emplace_back(flecs::entity_view(ecsWorld, e.id()));
+      //      tiles.emplace_back(flecs::entity_view(ecsWorld, e.id()));
       tiles.emplace_back(e);
     }
   }
@@ -55,62 +111,63 @@ void createTilesWith8Neighbours(flecs::world &ecsWorld, const flecs::entity &pre
     //    auto tile = ecsWorld.entity(landscapeTiles[i]);
     auto tile = tiles[i].entity();
 
-//    Neighbours8 neighbours{-1, -1, -1, -1, -1, -1, -1, -1};
+    //    Neighbours8 neighbours{-1, -1, -1, -1, -1, -1, -1, -1};
     Neighbours8 neighbours{};
 
     // start in the top left
     if (x < width - 1) {// not all the way to the right
-      neighbours.right = tiles[i + 1];
+      setNeighbourNode(tile, NeighbourTypeEnum::Right, tiles[i + 1], neighbours);
 
       if (y < height - 1) {// not all the way at the bottom
-        neighbours.bottom = tiles[i + width];
-        neighbours.bottomRight = tiles[i + width + 1];
+        setNeighbourNode(tile, NeighbourTypeEnum::Bottom, tiles[i + width], neighbours);
+        setNeighbourNode(tile, NeighbourTypeEnum::BottomRight, tiles[i + width + 1], neighbours);
       }
 
       if (y > 0) {// not the top row
-        neighbours.top = tiles[i - width];
-        neighbours.topRight = tiles[i - width + 1];
+        setNeighbourNode(tile, NeighbourTypeEnum::Top, tiles[i - width], neighbours);
+        setNeighbourNode(tile, NeighbourTypeEnum::TopRight, tiles[i - width + 1], neighbours);
       }
     }
 
     if (x > 0) {// not all the way to the left
-      neighbours.left = tiles[i - 1];
+      setNeighbourNode(tile, NeighbourTypeEnum::Left, tiles[i - 1], neighbours);
 
-      if (y < height - 1) {                            // not all the way at the bottom
-        neighbours.bottom = tiles[i + width];// might end up overwriting the previous set bottom
-        neighbours.bottomLeft = tiles[i + width - 1];
+      if (y < height - 1) {// not all the way at the bottom
+        setNeighbourNode(tile, NeighbourTypeEnum::Bottom, tiles[i + width], neighbours);
+        setNeighbourNode(tile, NeighbourTypeEnum::BottomLeft, tiles[i + width - 1], neighbours);
       }
 
-      if (y > 0) {                                  // not the top row
-        neighbours.top = tiles[i - width];// might end up overwriting the previous set top
-        neighbours.topLeft = tiles[i - width - 1];
+      if (y > 0) {// not the top row
+        setNeighbourNode(tile, NeighbourTypeEnum::Top, tiles[i - width], neighbours);
+        setNeighbourNode(tile, NeighbourTypeEnum::TopLeft, tiles[i - width - 1], neighbours);
       }
     }
 
     tile.set<Neighbours8>(neighbours);
 
-    auto n = tile.get<Neighbours8>();
-
-    flecs::entity_to_json_desc_t descEnt = {};
-    descEnt.serialize_values = true;
-//    descEnt.serialize_base = true;
-//    descEnt.serialize_brief = true;
-//    descEnt.serialize_hidden = true;
-//    descEnt.serialize_label = true;
-//    descEnt.serialize_link = true;
-//    descEnt.serialize_path = true;
-//    descEnt.serialize_type_info = true;
-//    auto j = std::string(tile.to_json(&descEnt).c_str());
-
-    auto jsonE = std::string(tile.to_json(&descEnt).c_str());
-
-    std::cout << jsonE << std::endl;
+//    flecs::entity_to_json_desc_t descEnt = {};
+//    descEnt.serialize_values = true;
+//    //    descEnt.serialize_base = true;
+//    //    descEnt.serialize_brief = true;
+//    //    descEnt.serialize_hidden = true;
+//    //    descEnt.serialize_label = true;
+//    //    descEnt.serialize_link = true;
+//    //    descEnt.serialize_path = true;
+//    //    descEnt.serialize_type_info = true;
+//    //    auto j = std::string(tile.to_json(&descEnt).c_str());
+//
+//    auto jsonE = std::string(tile.to_json(&descEnt).c_str());
+//
+//    std::cout << jsonE << std::endl;
   }
 }
 
 struct Inits {
+//  static flecs::entity neighbourTileE;
+//  static flecs::entity neighbourTileRightE;
+
   Inits(flecs::world &ecsWorld) {
-    ecsWorld.module<Inits>();
+//    ecsWorld.module<Inits>();
 
     //    auto landscapeTileBase = ecsWorld.entity()
     //        .add<Tile>()
