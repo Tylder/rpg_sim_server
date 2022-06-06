@@ -2,16 +2,16 @@
 #include "flecs.h"
 #include "flecs_modules/landscape/components.cpp"
 #include "flecs_modules/landscape/init.cpp"
-//#include "flecs_modules/landscape/systems.cpp"
-//
-//#include "flecs_modules/landscape/ground/components.cpp"
-//#include "flecs_modules/landscape/ground/init.cpp"
+#include "flecs_modules/landscape/systems.cpp"
+
+#include "flecs_modules/landscape/ground/components.cpp"
+#include "flecs_modules/landscape/ground/init.cpp"
 #include "flecs_modules/landscape/ground/systems.cpp"
-//#include "flecs_modules/net/components.cpp"
-//#include "flecs_modules/tile/systems.cpp"
-//#include "flecs_modules/transform/components.cpp"
-//#include "flecs_modules/transform/systems.cpp"
-//#include "nlohmann/json.hpp"
+#include "flecs_modules/net/components.cpp"
+#include "flecs_modules/tile/systems.cpp"
+#include "flecs_modules/transform/components.cpp"
+#include "flecs_modules/transform/systems.cpp"
+#include "nlohmann/json.hpp"
 #include <chrono>
 #include <iostream>
 
@@ -37,22 +37,25 @@ int main() {
   flecs::log::set_level(10);
 #endif
   flecs::world ecs;
-  //  ecs.import <Transform::Componets>();
-  //  ecs.import <Tile::Components>();
-  //  ecs.import <Landscape::Components>();
-  //  ecs.import <Landscape::Ground::Components>();
-  //  ecs.import <Net::Components>();
-  //
-  //  ecs.import <Transform::Systems>();
-  //  ecs.import <Landscape::Systems>();
-  //  ecs.import <Tile::Systems>();
-  //    ecs.app().enable_rest().run();
+  ecs.import <Transform::Componets>();
+  ecs.import <Tile::Components>();
+  ecs.import <Landscape::Components>();
+  ecs.import <Landscape::Ground::Components>();
+  ecs.import <Net::Components>();
+
+  ecs.import <Transform::Systems>();
+  ecs.import <Landscape::Systems>();
+  ecs.import <Tile::Systems>();
+
+  //      ecs.app().enable_rest().run();
 
   ecs.set_threads(4);
 
-  Landscape::Init(ecs);
+  Landscape::init(ecs);
+  Landscape::Ground::init(ecs);
 
-  //  Landscape::createLandscapeTiles(ecs, landscapeInits.landscapeTileBase, "LandscapeTile", 3, 1);
+  Landscape::createLandscapeTiles(ecs, Landscape::landscapeTileBase_Prefab, "LandscapeTile", 3, 1);
+  Landscape::Ground::createGroundTiles(ecs, 3, 1);
   //  auto qTile = ecs.query<
   //      const Landscape::LandscapeTile,
   //      const Transform::Position2<int32_t>,
@@ -64,21 +67,21 @@ int main() {
   //      const Tile::ConnectedNode,
   //                      Tile::Neighbours8
 
-  auto NTile = ecs.query_builder<>()
-                   .term<Tile::ConnectedNode>(flecs::Wildcard)
-                   .build();
+  auto connectedNode_Query = ecs.query_builder<>()
+                                 .term<Tile::ConnectedNode>(flecs::Wildcard)
+                                 .build();
 
-  NTile.iter([](flecs::iter &it) {
+  connectedNode_Query.iter([](flecs::iter &it) {
     auto pair1 = it.pair(1).first().name();
     auto pair2 = it.pair(1).second().name();
 
     std::cout << "sdsd";
   });
 
-  auto N2Tile = ecs.query_builder<Tile::NeighbourNode>().build();
+  auto neighbourNode_Query = ecs.query_builder<Tile::NeighbourNode>().build();
   //  auto N2Tile  = ecs.query<Tile::NeighbourTile>();
 
-  N2Tile.iter([](flecs::iter &it, Tile::NeighbourNode *t) {
+  neighbourNode_Query.iter([](flecs::iter &it, Tile::NeighbourNode *t) {
     //    auto pair1 = it.pair(1).first().name();
     //    auto pair2 = it.pair(1).second().name();
 

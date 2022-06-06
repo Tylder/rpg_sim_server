@@ -11,11 +11,11 @@
 namespace Landscape {
 
 struct Map {};
-struct LandscapeTile {}; // base type
-struct RockGroundTile {};//
-struct DirtTile {};      //
-struct GrassTile {};     //
-struct WaterTile {};     //
+struct LandscapeTile {};// base type
+//struct RockGroundTile {};//
+//struct DirtTile {};      //
+//struct GrassTile {};     //
+//struct WaterTile {};     //
 
 struct LandscapeTileType {};
 
