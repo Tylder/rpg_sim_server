@@ -15,7 +15,10 @@
 
 namespace Landscape::Ground {
 
-static flecs::entity groundTileBase_Prefab;
+static flecs::entity granite_Prefab;
+static flecs::entity slate_Prefab;
+static flecs::entity sandstone_Prefab;
+
 static flecs::query<const GroundTile, const Tile::Index, const Tile::Index2> groundTilesBasicQuery;
 
 std::vector<flecs::entity_view> createGroundTiles(flecs::world &ecsWorld, size_t width, size_t height) {
@@ -25,24 +28,22 @@ std::vector<flecs::entity_view> createGroundTiles(flecs::world &ecsWorld, size_t
   f.iter([&](flecs::iter &it, const LandscapeTile *t, const Tile::Neighbours8 *n8) {
     for (auto i : it) {
       auto tile = it.entity(i);
-      tile.add(granite_Entity);
+      tile.add<Granite>();
       std::cout << "Landscape: " << tile.name() << ", type: " << tile.type() << std::endl;
       landscapeTiles.emplace_back(tile);
     }
   });
 
-  std::vector<flecs::entity_view> groundTiles {};
+  std::vector<flecs::entity_view> groundTiles{};
 
   for (auto tile : landscapeTiles) {
     auto index2 = tile.get<Tile::Index2>();
 
     std::string name = "Ground - x: " + std::to_string(index2->x) + ", y: " + std::to_string(index2->y);
 
-    auto g = ecsWorld.entity(name.c_str()).is_a(groundTileBase_Prefab).child_of(tile);
+    tile.entity().add<Granite>(granite_Prefab);
 
-    groundTiles.emplace_back(g);
-
-    std::cout << "Ground: " << g.name() << ", type: " << g.type() << std::endl;
+    std::cout << "Ground: " << tile.name() << ", type: " << g.type() << std::endl;
     std::cout << "#######" << std::endl;
   }
 
@@ -53,12 +54,14 @@ void init(flecs::world &ecsWorld) {
   ecsWorld.import <Landscape::Components>();
   Landscape::init(ecsWorld);
 
-  groundTileBase_Prefab = ecsWorld.prefab()
-                              .add<GroundTile>();
+  granite_Prefab = ecsWorld.prefab()
+                       .add<Granite>();
 
-  granite_Entity = ecsWorld.entity("Granite").is_a(groundTileBase_Prefab);
-  slate_Entity = ecsWorld.entity("Slate").is_a(groundTileBase_Prefab);
-  sandstone_Entity = ecsWorld.entity("Sandstone").is_a(groundTileBase_Prefab);
+  slate_Prefab = ecsWorld.prefab()
+                      .add<Slate>();
+
+  sandstone_Prefab = ecsWorld.prefab()
+                      .add<Sandstone>();
 }
 
 }// namespace Landscape::Ground

@@ -33,7 +33,6 @@ struct Components {
     ecsWorld.module<Components>();
 
     ecsWorld.component<Map>().add<Map>();//  singleton
-
     ecsWorld.component<LandscapeTile>().is_a<Tile::Tile>();
 
     ecsWorld.component<Depth>("Depth")
