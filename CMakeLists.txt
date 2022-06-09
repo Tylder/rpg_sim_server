@@ -67,13 +67,13 @@ add_library(flecs_net STATIC
         ${FLECS_MODULE_DIR}/net/inits.cpp
         ${FLECS_MODULE_DIR}/net/systems.cpp)
 
-target_link_libraries(flecs_net PUBLIC flecs_static)
+target_link_libraries(flecs_net PUBLIC nlohmann_json csv flecs_static)
 
 add_library(flecs_transform STATIC
         ${FLECS_MODULE_DIR}/transform/components.cpp
         ${FLECS_MODULE_DIR}/transform/systems.cpp)
 
-target_link_libraries(flecs_transform PUBLIC flecs_static)
+target_link_libraries(flecs_transform PUBLIC nlohmann_json csv flecs_static)
 
 add_library(flecs_tile STATIC
         ${FLECS_MODULE_DIR}/tile/components.cpp
@@ -81,7 +81,7 @@ add_library(flecs_tile STATIC
         ${FLECS_MODULE_DIR}/tile/helpers.cpp
         ${FLECS_MODULE_DIR}/tile/systems.cpp)
 
-target_link_libraries(flecs_tile PUBLIC flecs_static flecs_transform)
+target_link_libraries(flecs_tile PUBLIC nlohmann_json csv flecs_static flecs_transform)
 
 #### LANDSCAPE
 add_library(flecs_landscape STATIC
@@ -89,22 +89,22 @@ add_library(flecs_landscape STATIC
         ${FLECS_MODULE_DIR}/landscape/init.cpp
         ${FLECS_MODULE_DIR}/landscape/systems.cpp)
 
-target_link_libraries(flecs_landscape PUBLIC FastNoise flecs_static flecs_transform flecs_tile flecs_net)
+target_link_libraries(flecs_landscape PUBLIC nlohmann_json csv flecs_static FastNoise flecs_transform flecs_tile flecs_net)
 
-#### GROUND TILES
-add_library(flecs_landscape_ground STATIC
-        ${FLECS_MODULE_DIR}/landscape/ground/components.cpp
-        ${FLECS_MODULE_DIR}/landscape/ground/init.cpp
-        ${FLECS_MODULE_DIR}/landscape/ground/systems.cpp)
+#### ROCK TILES
+add_library(flecs_landscape_rock STATIC
+        ${FLECS_MODULE_DIR}/landscape/rockTile/components.cpp
+        ${FLECS_MODULE_DIR}/landscape/rockTile/init.cpp
+        ${FLECS_MODULE_DIR}/landscape/rockTile/systems.cpp)
 
-target_link_libraries(flecs_landscape_ground PUBLIC flecs_landscape)
+target_link_libraries(flecs_landscape_rock PUBLIC nlohmann_json csv flecs_static flecs_landscape)
 
-
+#### MAP
 add_library(map STATIC
         ${INC_DIR}/map/Map.cpp
         ${INC_DIR}/map/Map.cpp)
 
-target_link_libraries(flecs_landscape PUBLIC FastNoise flecs_static flecs_transform flecs_tile flecs_net)
+target_link_libraries(map PUBLIC nlohmann_json csv flecs_static FastNoise flecs_transform flecs_tile flecs_net)
 
 ## Specifying that is CPP
 set_target_properties(flecs_transform flecs_landscape PROPERTIES LINKER_LANGUAGE CXX)
@@ -142,14 +142,16 @@ add_subdirectory(./extern/flecs)
 
 
 target_link_libraries(rpg_sim_server PUBLIC
-        FastNoise
         nlohmann_json
         csv
         flecs_static
+        FastNoise
+        flecs_tile
         flecs_landscape
+        flecs_landscape_rock
         flecs_transform
         map
         )
 
 #target_link_libraries(examples PUBLIC FastNoise flecs_static csv)
-target_link_libraries(examples PUBLIC FastNoise flecs_static)
+target_link_libraries(examples PUBLIC nlohmann_json csv flecs_static FastNoise)

@@ -9,18 +9,17 @@
 #include "flecs.h"
 #include <vector>
 
-namespace Landscape::Systems {
+namespace Landscape::Rock {
 
 struct Systems {
   Systems(flecs::world &ecsWorld) {
     ecsWorld.module<Systems>();
 
-//    auto landscapeTileBase = ecsWorld.entity()
-//        .add<Tile>()
-//        .set<Transform::Size2<>>({1.0, 1.0});
-
+    //    auto landscapeTileBase = ecsWorld.entity()
+    //        .add<Tile>()
+    //        .set<Transform::Size2<>>({1.0, 1.0});
   }
 };
-} // namespace Landscape::Systems
+}// namespace Landscape::Rock
 
-#endif // RPG_SIM_SERVER_LANDSCAPE_SYSTEMS_H
+#endif// RPG_SIM_SERVER_LANDSCAPE_SYSTEMS_H

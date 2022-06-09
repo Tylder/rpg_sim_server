@@ -4,6 +4,7 @@
 
 #ifndef RPG_SIM_SERVER_TILE_COMPONENTS_H
 #define RPG_SIM_SERVER_TILE_COMPONENTS_H
+#include "flecs_modules/transform/components.cpp"
 
 #include "flecs.h"
 
@@ -37,7 +38,7 @@ struct NeighbourNode {
   flecs::entity_t node;
 };
 
-struct Tile {};
+//struct TileType {};// relation
 
 struct Index {
   int32_t value;
@@ -47,10 +48,15 @@ struct Index2 {
   int32_t x, y;
 };
 
+static flecs::entity tile2_prefab;
+
 struct Components {
 
   Components(flecs::world &ecsWorld) {
     ecsWorld.module<Components>();
+
+    // https://flecs.docsforge.com/master/query-manual/#transitivity
+    //    ecsWorld.component<TileType>().add(flecs::Transitive);// if 'x' is 'y' and 'y' is 'a' then 'x' == 'a'
 
     ecsWorld.component<Index>("Index")
         .member(flecs::I32, "value");
@@ -93,6 +99,11 @@ struct Components {
     //    auto landscapeTileBase = ecsWorld.entity()
     //        .add<Tile>()
     //        .set<Transform::Size2<>>({1.0, 1.0});
+
+    tile2_prefab = ecsWorld.prefab("Tile2_Prefab")
+                       .override<Transform::Position2<>>()
+                       .override<Tile::Index>()
+                       .override<Tile::Index2>();
   }
 };
 }// namespace Tile

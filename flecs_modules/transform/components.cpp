@@ -5,8 +5,8 @@
 #ifndef RPG_SIM_SERVER_TRANSFORM_COMPONENTS_H
 #define RPG_SIM_SERVER_TRANSFORM_COMPONENTS_H
 
-#include <string>
 #include "flecs.h"
+#include <string>
 
 namespace Transform {
 
@@ -16,6 +16,9 @@ namespace Transform {
 //      .member<T>("x")
 //      .member<T>("y");
 //}
+// Tags for local/world position
+struct Local {};
+struct World {};
 
 template<typename T = double>
 struct Tranform2Dim {
@@ -85,6 +88,9 @@ struct Componets {
 
     /* REGISTERING COMPONENTS FOR REFLECTION */
 
+    ecsWorld.component<Local>("Local");
+    ecsWorld.component<World>("World");
+
     /* SIZE 2 */
     ecsWorld.component<Size2<double>>("Size2")
         .member<double>("x")
@@ -126,7 +132,6 @@ struct Componets {
         .member(flecs::I64, "x")
         .member(flecs::I64, "y")
         .member(flecs::I64, "z");
-
 
     /* POSITION 2 */
     ecsWorld.component<Position2<double>>("Position2")
@@ -348,9 +353,8 @@ struct Componets {
         .member(flecs::I64, "x")
         .member(flecs::I64, "y")
         .member(flecs::I64, "z");
-
   }
 };
-}
+}// namespace Transform
 
-#endif // RPG_SIM_SERVER_TRANSFORM_COMPONENTS_H
+#endif// RPG_SIM_SERVER_TRANSFORM_COMPONENTS_H
