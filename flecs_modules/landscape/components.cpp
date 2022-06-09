@@ -7,17 +7,11 @@
 
 #include "flecs_modules/tile/components.cpp"
 #include "flecs.h"
+#include "flecs_modules/transform/components.cpp"
 
 namespace Landscape {
 
 struct Map {};
-struct LandscapeTile {};// base type
-//struct RockGroundTile {};//
-//struct DirtTile {};      //
-//struct GrassTile {};     //
-//struct WaterTile {};     //
-
-struct LandscapeTileType {};
 
 // in meters, applies to both dirt and water
 struct Depth {
@@ -29,11 +23,35 @@ struct Coverage {
 };
 
 struct Components {
+
+  static flecs::entity mapE;
+  static flecs::entity landscapeTile_prefab;
+  static flecs::entity rockTile_prefab;
+  static flecs::entity dirtTile_prefab;
+  static flecs::entity grassTile_prefab;
+  static flecs::entity waterTile_prefab;
+
   Components(flecs::world &ecsWorld) {
     ecsWorld.module<Components>();
+    ecsWorld.import <Tile::Components>();
+
+    mapE = ecsWorld.entity<Map>("Map");
+
+    landscapeTile_prefab = ecsWorld.prefab()
+                               .child_of(mapE)// deletes all landscape tiles on delete of map
+                               .is_a(Tile::Components::tile2_prefab)
+                               .set<Transform::Size2<>>({1.0, 1.0})// hard coded size
+                               .override<Tile::Neighbours8>()
+                               .override<Transform::Position2<>>()
+                               .override<Tile::Index>()
+                               .override<Tile::Index2>();
+
+    rockTile_prefab = ecsWorld.prefab("rockTile").is_a(landscapeTile_prefab);
+    dirtTile_prefab = ecsWorld.prefab("dirtTile").is_a(landscapeTile_prefab);
+    grassTile_prefab = ecsWorld.prefab("grassTile").is_a(landscapeTile_prefab);
+    waterTile_prefab = ecsWorld.prefab("waterTile").is_a(landscapeTile_prefab);
 
     ecsWorld.component<Map>().add<Map>();//  singleton
-    ecsWorld.component<LandscapeTile>().is_a<Tile::Tile>();
 
     ecsWorld.component<Depth>("Depth")
         .member(flecs::U8, "value");
@@ -41,8 +59,8 @@ struct Components {
     ecsWorld.component<Coverage>("Coverage")
         .member(flecs::U8, "value");
 
-    ecsWorld.component<LandscapeTileType>()
-        .add(flecs::Exclusive);
+    //    ecsWorld.component<LandscapeTileType>()
+    //        .add(flecs::Exclusive);
   }
 };
 }// namespace Landscape

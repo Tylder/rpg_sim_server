@@ -37,7 +37,7 @@ struct NeighbourNode {
   flecs::entity_t node;
 };
 
-struct Tile {};
+//struct TileType {};// relation
 
 struct Index {
   int32_t value;
@@ -49,8 +49,15 @@ struct Index2 {
 
 struct Components {
 
+  static flecs::entity tile2_prefab;
+
   Components(flecs::world &ecsWorld) {
     ecsWorld.module<Components>();
+
+    tile2_prefab = ecsWorld.prefab("Tile2 Prefab");
+
+    // https://flecs.docsforge.com/master/query-manual/#transitivity
+    //    ecsWorld.component<TileType>().add(flecs::Transitive);// if 'x' is 'y' and 'y' is 'a' then 'x' == 'a'
 
     ecsWorld.component<Index>("Index")
         .member(flecs::I32, "value");
