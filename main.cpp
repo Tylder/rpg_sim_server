@@ -1,6 +1,7 @@
 #include "FastNoise/FastNoise.h"
 #include "flecs.h"
 #include "flecs_modules/landscape/components.cpp"
+#include "flecs_modules/map/components.cpp"
 #include "flecs_modules/landscape/rockTile/components.cpp"
 #include "flecs_modules/net/components.cpp"
 #include "flecs_modules/tile/components.cpp"
@@ -48,9 +49,10 @@ int main() {
 #endif
   flecs::world ecs;
   ecs.import <Transform::Componets>();
+  ecs.import <Map::Components>();
+    ecs.import <Map::Components>();
   ecs.import <Tile::Components>();
   ecs.import <Landscape::Components>();
-  ecs.import <Landscape::Rock::Components>();
   ecs.import <Net::Components>();
   //
   //  ecs.import <Transform::Systems>();
@@ -64,7 +66,8 @@ int main() {
   //  Landscape::init(ecs);
   //  Landscape::Rock::init(ecs);
   //
-  Landscape::createTiles(ecs, Landscape::landscapeTile_prefab, "LandscapeTile", 3, 1);
+  ecs.entity("Map").set<Map::Map>({3, 3});
+
   //  Landscape::Rock::createTiles(ecs);
   //  auto qTile = ecs.query<
   //      const Landscape::LandscapeTile,
@@ -74,18 +77,18 @@ int main() {
   //
   //  auto qTile = ecs.query_builder<>().term<Tile::NeighbourTypeEnum>(flecs::Wildcard).build();
   //  //                      const Tile::NeighbourNode
-  //  //      const Tile::ConnectedNode,
+  //  //      const Tile::ConnectsToNode,
   //  //                      Tile::Neighbours8
   //
   //  auto connectedNode_Query = ecs.query_builder<>()
-  //                                 .term<Tile::ConnectedNode>(flecs::Wildcard)
+  //                                 .term<Tile::ConnectsToNode>(flecs::Wildcard)
   //                                 .build();
   //
   //  connectedNode_Query.iter([](flecs::iter &it) {
   //    auto pair1 = it.pair(1).first().name();
   //    auto pair2 = it.pair(1).second().name();
   //
-  //    std::cout << "sdsd";
+  //    std::cout << "sdsd";++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ggggggggggggggggggggtttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt5tttttttt5tttttt5tttttt5t5tt5t5ttttttttttttttt5t5t5t5t5t5t5t5t5t5t5t5t5t5t5t5t5t5t5t5t5t5t5t5t5t5t5t5t5t5t5t5t555555555g5555555555555555t5555555tt5tttttttttttt5t5tttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
   //  });
   //
   //  auto neighbourNode_Query = ecs.query_builder<Tile::NeighbourNode>().build();
@@ -97,7 +100,7 @@ int main() {
   //
   //    std::cout << "sdsd";
   //  });
-  //
+  //ttttttttttttttttttttttttttttttttttttttttttttt
   //  auto N2Tile  = ecs.query_builder<>().term<Tile::NeighbourNode>(flecs::Wildcard).build();
   ////  auto N2Tile  = ecs.query<Tile::NeighbourTile>();
   //
@@ -150,9 +153,38 @@ int main() {
   //
   //               .build();
 
-  //  auto q = ecs.query_builder<>().term(flecs::IsA, ecs.id<Landscape::Ground::GroundTile>()).build();
-  auto q = ecs.query_builder<Tile::Index2, Tile::Neighbours8>()
-               //               .term("(IsA, Landscape.rockTile)")
+
+  //  auto q = ecs.query_builder<Tile::Index2, Tile::Index2, Tile::Neighbours8>()
+  ////                .term(flecs::IsA).obj(Tile::tile2_prefab)
+  ////                .term(flecs::IsA, Tile::tile2_prefab)
+  //               .term(flecs::IsA, Landscape::landscapeTile_prefab)
+  //               .arg(2)
+  //                  .subj<Tile::ConnectsToRightNode>()
+  //                  .obj(flecs::Wildcard).oper(flecs::Optional)
+  //               .build();
+
+//  auto r = ecs.rule_builder()
+//           .term<Tile::ConnectsToLeftNode>().obj().var("nodeVar")
+//           .term<Tile::ConnectsToRightNode>().obj().var("nodeVar")
+//           .build();
+
+//  auto r = ecs.rule_builder<Tile::Index2>()
+////      .term<Tile::Index2>()
+////      .term<Tile::Index>()
+//      .term<Tile::ConnectsToRightNode>().obj().var("X")
+//      .build();
+
+//  int var = r.find_var("X");
+  //  auto q = ecs.query_builder<Tile::Index2, Tile::Index2, Tile::Neighbours8>()
+//               //               .term("(Tile.Components.ConnectsToRightNode, $NodeVar)")
+//               //               .term("(Tile.Components.ConnectsToLeftNode, $NodeVar)")
+//               .term(flecs::IsA, Tile::tile2_prefab)
+//               .arg(2).subj<Tile::ConnectsToLeftNode>().obj(flecs::Wildcard)
+//               //                .term(flecs::IsA, Tile::tile2_prefab)
+//               //           .term("(Tile.Components.ConnectsToRightNode, *)")
+//               .build();
+
+  auto q = ecs.query_builder<Tile::Index2, Tile::Index2>()
                .build();
 
   // Serialize query to JSON. Note that this works for any iterable object,
@@ -170,6 +202,16 @@ int main() {
 
   auto queryJson = nlohmann::json::parse(json_query.c_str());
   std::cout << queryJson.dump(2) << std::endl;
+
+  // Iterate the rule
+//  r.each([&](flecs::iter& it, size_t index, Tile::Index2 index2) {
+//    auto name = it.entity(index).name().c_str();
+//    auto varName = it.get_var(var).name().c_str();
+//    std::cout
+//        << it.entity(index).name()
+//        << " lives in " << it.get_var(var).name()
+//        << "\n";
+//  });
 
   std::cout << "" << std::endl;
   //  flecs::iter_to_json_desc_t descIter = {};

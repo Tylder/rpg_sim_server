@@ -32,7 +32,19 @@ struct Neighbours8 {
   flecs::entity_t topLeft;
 };
 
-struct ConnectedNode {};// links to other tiles that are connected somehow;
+struct ConnectsToNode {
+  std::string type;
+};// links to other tiles that are connected somehow;
+
+struct ConnectsToTopNode : ConnectsToNode{};
+struct ConnectsToTopRightNode : ConnectsToNode{};
+struct ConnectsToRightNode : ConnectsToNode{};
+struct ConnectsToBottomRightNode : ConnectsToNode{};
+struct ConnectsToBottomNode : ConnectsToNode{};
+struct ConnectsToBottomLeftNode : ConnectsToNode{};
+struct ConnectsToLeftNode : ConnectsToNode{};
+struct ConnectsToTopLeftNode : ConnectsToNode{};
+
 struct NeighbourNode {
   //  NeighbourTypeEnum type;
   flecs::entity_t node;
@@ -48,7 +60,11 @@ struct Index2 {
   int32_t x, y;
 };
 
-static flecs::entity tile2_prefab;
+struct Tile {};
+struct Tile2 : Tile {};
+
+[[maybe_unused]] static flecs::entity tile_prefab;
+[[maybe_unused]] static flecs::entity tile2_prefab;
 
 struct Components {
 
@@ -57,6 +73,9 @@ struct Components {
 
     // https://flecs.docsforge.com/master/query-manual/#transitivity
     //    ecsWorld.component<TileType>().add(flecs::Transitive);// if 'x' is 'y' and 'y' is 'a' then 'x' == 'a'
+
+    ecsWorld.component<Tile>("Tile");
+    ecsWorld.component<Tile2>("Tile2").is_a<Tile>();
 
     ecsWorld.component<Index>("Index")
         .member(flecs::I32, "value");
@@ -75,7 +94,15 @@ struct Components {
         .member(flecs::Entity, "left")
         .member(flecs::Entity, "topLeft");
 
-    ecsWorld.component<ConnectedNode>("ConnectedNode");
+    ecsWorld.component<ConnectsToNode>("ConnectsToNode");
+    ecsWorld.component<ConnectsToTopNode>("ConnectsToTopNode").is_a<ConnectsToNode>();
+    ecsWorld.component<ConnectsToTopRightNode>("ConnectsToTopRightNode").is_a<ConnectsToNode>();
+    ecsWorld.component<ConnectsToRightNode>("ConnectsToRightNode").is_a<ConnectsToNode>();
+    ecsWorld.component<ConnectsToBottomRightNode>("ConnectsToBottomRightNode").is_a<ConnectsToNode>();
+    ecsWorld.component<ConnectsToBottomNode>("ConnectsToBottomNode").is_a<ConnectsToNode>();
+    ecsWorld.component<ConnectsToBottomLeftNode>("ConnectsToBottomLeftNode").is_a<ConnectsToNode>();
+    ecsWorld.component<ConnectsToLeftNode>("ConnectsToLeftNode").is_a<ConnectsToNode>();
+    ecsWorld.component<ConnectsToTopLeftNode>("ConnectsToTopLeftNode").is_a<ConnectsToNode>();
 
     //    ecsWorld.component<NeighbourTypeEnum>()
     //        .constant("Top", Top)
@@ -90,7 +117,7 @@ struct Components {
     ecsWorld.component<NeighbourNode>("NeighbourNode")
         //        .member<NeighbourTypeEnum>("type")
         .member(flecs::Entity, "node")
-        .is_a<ConnectedNode>();
+        .is_a<ConnectsToNode>();
 
     //    ecsWorld.component<NeighbourRight>("NeighbourRight")
     //        .is_a<NeighbourTile>()
@@ -100,10 +127,15 @@ struct Components {
     //        .add<Tile>()
     //        .set<Transform::Size2<>>({1.0, 1.0});
 
-    tile2_prefab = ecsWorld.prefab("Tile2_Prefab")
+    tile_prefab = ecsWorld.prefab("Tile")
+                  .add<Tile>();
+
+    tile2_prefab = ecsWorld.prefab("Tile2")
+                       .is_a<Tile>()
+                       .is_a<Tile2>()
                        .override<Transform::Position2<>>()
-                       .override<Tile::Index>()
-                       .override<Tile::Index2>();
+                       .override<Index>()
+                       .override<Index2>();
   }
 };
 }// namespace Tile

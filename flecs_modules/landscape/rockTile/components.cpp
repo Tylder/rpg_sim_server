@@ -11,9 +11,13 @@
 
 namespace Landscape::Rock {
 
-static flecs::entity graniteTile_prefab;
-static flecs::entity slateTile_prefab;
-static flecs::entity sandstoneTile_prefab;
+struct GraniteTile : RockTile {};
+struct SlateTile : RockTile {};
+struct SandstoneTile : RockTile {};
+
+[[maybe_unused]] static flecs::entity graniteTile_prefab;
+[[maybe_unused]] static flecs::entity slateTile_prefab;
+[[maybe_unused]] static flecs::entity sandstoneTile_prefab;
 
 struct Components {
 
@@ -21,9 +25,9 @@ struct Components {
     ecsWorld.module<Components>();
     ecsWorld.import <Landscape::Components>();
 
-    graniteTile_prefab = ecsWorld.prefab("GraniteTile_prefab").is_a(Landscape::rockTile_prefab);
-    slateTile_prefab = ecsWorld.prefab("SlateTile_prefab").is_a(Landscape::rockTile_prefab);
-    sandstoneTile_prefab = ecsWorld.prefab("SandstoneTile_prefab").is_a(Landscape::rockTile_prefab);
+    graniteTile_prefab = ecsWorld.prefab("GraniteTile_prefab").is_a(Landscape::rockTile_prefab).is_a<GraniteTile>().add<GraniteTile>();
+    slateTile_prefab = ecsWorld.prefab("SlateTile_prefab").is_a(Landscape::rockTile_prefab).is_a<SlateTile>().add<SlateTile>();
+    sandstoneTile_prefab = ecsWorld.prefab("SandstoneTile_prefab").is_a(Landscape::rockTile_prefab).is_a<SandstoneTile>().add<SandstoneTile>();
 
     //    ecsWorld.component<GroundTypeEnum>("GroundTypeEnum")
     //        .constant("Granite", Granite)

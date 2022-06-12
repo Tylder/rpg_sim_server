@@ -19,10 +19,19 @@ namespace Landscape {
 //static flecs::query<const LandscapeTile> landscapeTilesBasic_Query;
 //static flecs::query<const LandscapeTile, const Tile::Index, const Tile::Index2> landscapeTiles_Query;
 
-std::vector<flecs::entity_view> createTiles(flecs::world &ecsWorld, const flecs::entity &prefab, const std::string &baseName, size_t width, size_t height) {
+std::vector<flecs::entity_view> getTiles(flecs::world &ecsWorld) {
+  std::vector<flecs::entity_view> landscapeTiles{};
+  Landscape::landscapeTileQuery.iter([&](flecs::iter &it, const LandscapeTile *t) {
+    for (auto i : it) {
+      landscapeTiles.emplace_back(it.entity(i));
+    }
+  });
+}
+
+std::vector<flecs::entity_view> createTiles(flecs::world &ecsWorld, size_t width, size_t height) {
 //  assert(landscapeTileBase_Prefab);
 
-  return Tile::createTilesWith8Neighbours(ecsWorld, prefab, baseName, width, height);
+  return Tile::createTilesWith8Neighbours(ecsWorld, Landscape::landscapeTile_prefab, "LandscapeTile", width, height);
 }
 
 void init(flecs::world &ecsWorld) {

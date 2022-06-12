@@ -11,9 +11,9 @@ struct Gigawatts {};
 // Type used for Eats relation
 struct Eats {};
 
-struct Direction {};
-struct DirectionUp : Direction {};
-struct DirectionDown : Direction {};
+//struct Direction {};
+//struct DirectionUp : Direction {};
+//struct DirectionDown : Direction {};
 
 //enum class DirectionEnum {
 //  Up = 0,
@@ -65,26 +65,27 @@ int main() {
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  ecs.component<DirectionUp>().is_a<Direction>();
-  ecs.component<DirectionDown>().is_a<Direction>();
+  auto Direction = ecs.entity();
+  auto DirectionUp = ecs.entity().is_a(Direction);
+  auto DirectionDown = ecs.entity().is_a(Direction);
 
-  auto eToSave = ecs.entity("eToSave");
+  auto eToSave = ecs.entity("eToSave").set<Requires>({0.1});;
   auto e2 = ecs.entity()
-                .add<DirectionUp>(eToSave)
-                .add<DirectionDown>(eToSave);
+                .add(DirectionUp, eToSave)
+                .add(DirectionDown, eToSave);
 
   std::cout << "e2's type: [" << e2.type().str() << "]\n";
-
-  //  auto pair = ecs.pair<flecs::IsA | Direction>(flecs::Wildcard);
 
   std::cout << "e2 type: " << e2.type().str() << std::endl;
 
   //  auto q2 = ecs.query_builder().term<DirectionUp>(flecs::Wildcard).build();
-  auto q2 = ecs.query_builder<>()
-                .term<DirectionUp>()
-                .obj(flecs::Wildcard)
+  auto q2 = ecs.query_builder()
+
+                //                .term("(IsA, DirectionUp[self|all|subset])")
+//                .subj(flecs::Wildcard)
                 .build();
 
+  auto q2_json = q2.iter().to_json();
   // Create a rule to find all ranged units
   //  auto rule1 = ecs.rule<>();
   //
@@ -97,13 +98,15 @@ int main() {
     auto pair1 = it.pair(1).first().type().str();
     auto pair2 = it.pair(1).second().type().str();
 
+
+
     std::cout << "pair1: " << pair1 << ", pair2: " << pair2 << std::endl;
   });
 
   // Relations can be iterated for an entity. This iterates (Eats, *):
-  e2.each<DirectionUp>([](flecs::entity second) {
-    std::cout << "e2 direction " << second.name() << "\n";
-  });
+//  e2.each<DirectionUp>([](flecs::entity second) {
+//    std::cout << "e2 direction " << second.name() << "\n";
+//  });
 
   std::cout << "node: " << std::endl;
 

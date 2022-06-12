@@ -83,13 +83,21 @@ add_library(flecs_tile STATIC
 
 target_link_libraries(flecs_tile PUBLIC nlohmann_json csv flecs_static flecs_transform)
 
+#### MAP
+add_library(flecs_map STATIC
+        ${FLECS_MODULE_DIR}/map/components.cpp
+        ${FLECS_MODULE_DIR}/map/init.cpp
+        ${FLECS_MODULE_DIR}/map/systems.cpp)
+
+target_link_libraries(flecs_map PUBLIC nlohmann_json csv flecs_static FastNoise flecs_transform flecs_tile flecs_net)
+
 #### LANDSCAPE
 add_library(flecs_landscape STATIC
         ${FLECS_MODULE_DIR}/landscape/components.cpp
         ${FLECS_MODULE_DIR}/landscape/init.cpp
         ${FLECS_MODULE_DIR}/landscape/systems.cpp)
 
-target_link_libraries(flecs_landscape PUBLIC nlohmann_json csv flecs_static FastNoise flecs_transform flecs_tile flecs_net)
+target_link_libraries(flecs_landscape PUBLIC nlohmann_json csv flecs_static FastNoise flecs_transform flecs_tile flecs_net flecs_map)
 
 #### ROCK TILES
 add_library(flecs_landscape_rock STATIC
@@ -97,14 +105,14 @@ add_library(flecs_landscape_rock STATIC
         ${FLECS_MODULE_DIR}/landscape/rockTile/init.cpp
         ${FLECS_MODULE_DIR}/landscape/rockTile/systems.cpp)
 
-target_link_libraries(flecs_landscape_rock PUBLIC nlohmann_json csv flecs_static flecs_landscape)
+target_link_libraries(flecs_landscape_rock PUBLIC nlohmann_json csv flecs_static flecs_landscape flecs_map)
 
 #### MAP
 add_library(map STATIC
         ${INC_DIR}/map/Map.cpp
         ${INC_DIR}/map/Map.cpp)
 
-target_link_libraries(map PUBLIC nlohmann_json csv flecs_static FastNoise flecs_transform flecs_tile flecs_net)
+target_link_libraries(map PUBLIC nlohmann_json csv flecs_static FastNoise flecs_transform flecs_tile flecs_net flecs_map)
 
 ## Specifying that is CPP
 set_target_properties(flecs_transform flecs_landscape PROPERTIES LINKER_LANGUAGE CXX)
@@ -150,7 +158,7 @@ target_link_libraries(rpg_sim_server PUBLIC
         flecs_landscape
         flecs_landscape_rock
         flecs_transform
-        map
+        flecs_map
         )
 
 #target_link_libraries(examples PUBLIC FastNoise flecs_static csv)
