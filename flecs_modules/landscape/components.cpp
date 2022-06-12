@@ -6,8 +6,8 @@
 #define RPG_SIM_SERVER_LANDSCAPE_COMPONENTS_H
 
 #include "flecs_modules/tile/components.cpp"
-#include "flecs_modules/map/components.cpp"
 #include "flecs.h"
+#include "flecs_modules/map/components.cpp"
 #include "flecs_modules/transform/components.cpp"
 
 namespace Landscape {
@@ -40,9 +40,13 @@ struct Components {
 
   Components(flecs::world &ecsWorld) {
     ecsWorld.module<Components>();
-    //    ecsWorld.import <Tile::Components>();
+    ecsWorld.import <Map::Components>();
 
-
+    ecsWorld.component<LandscapeTile>("LandscapeTile").add(flecs::Tag);
+    ecsWorld.component<RockTile>("RockTile").add(flecs::Tag);
+    ecsWorld.component<DirtTile>("DirtTile").add(flecs::Tag);
+    ecsWorld.component<GrassTile>("GrassTile").add(flecs::Tag);
+    ecsWorld.component<WaterTile>("WaterTile").add(flecs::Tag);
 
     ecsWorld.component<Depth>("Depth")
         .member(flecs::U8, "value");
@@ -56,8 +60,8 @@ struct Components {
     ecsWorld.component<GrassTile>();
     ecsWorld.component<WaterTile>();
 
-    landscapeTile_prefab = ecsWorld.prefab("LandscapeTile")
-                               .child_of(Map::map)// deletes all landscape tiles on delete of map
+    landscapeTile_prefab = ecsWorld.prefab("landscapeTile")
+                               //                               .child_of(Map::map)// deletes all landscape tiles on delete of map
                                .is_a(Tile::tile2_prefab)
                                .is_a<LandscapeTile>()
                                .add<LandscapeTile>()

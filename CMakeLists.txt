@@ -67,13 +67,13 @@ add_library(flecs_net STATIC
         ${FLECS_MODULE_DIR}/net/inits.cpp
         ${FLECS_MODULE_DIR}/net/systems.cpp)
 
-target_link_libraries(flecs_net PUBLIC nlohmann_json csv flecs_static)
+target_link_libraries(flecs_net PUBLIC nlohmann_json flecs_static)
 
 add_library(flecs_transform STATIC
         ${FLECS_MODULE_DIR}/transform/components.cpp
         ${FLECS_MODULE_DIR}/transform/systems.cpp)
 
-target_link_libraries(flecs_transform PUBLIC nlohmann_json csv flecs_static)
+target_link_libraries(flecs_transform PUBLIC nlohmann_json flecs_static)
 
 add_library(flecs_tile STATIC
         ${FLECS_MODULE_DIR}/tile/components.cpp
@@ -81,7 +81,7 @@ add_library(flecs_tile STATIC
         ${FLECS_MODULE_DIR}/tile/helpers.cpp
         ${FLECS_MODULE_DIR}/tile/systems.cpp)
 
-target_link_libraries(flecs_tile PUBLIC nlohmann_json csv flecs_static flecs_transform)
+target_link_libraries(flecs_tile PUBLIC nlohmann_json flecs_static flecs_transform)
 
 #### MAP
 add_library(flecs_map STATIC
@@ -89,7 +89,7 @@ add_library(flecs_map STATIC
         ${FLECS_MODULE_DIR}/map/init.cpp
         ${FLECS_MODULE_DIR}/map/systems.cpp)
 
-target_link_libraries(flecs_map PUBLIC nlohmann_json csv flecs_static FastNoise flecs_transform flecs_tile flecs_net)
+target_link_libraries(flecs_map PUBLIC nlohmann_json flecs_static FastNoise flecs_transform flecs_tile flecs_net)
 
 #### LANDSCAPE
 add_library(flecs_landscape STATIC

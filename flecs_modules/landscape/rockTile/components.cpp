@@ -23,11 +23,16 @@ struct Components {
 
   Components(flecs::world &ecsWorld) {
     ecsWorld.module<Components>();
+    ecsWorld.import <Map::Components>();
     ecsWorld.import <Landscape::Components>();
 
-    graniteTile_prefab = ecsWorld.prefab("GraniteTile_prefab").is_a(Landscape::rockTile_prefab).is_a<GraniteTile>().add<GraniteTile>();
-    slateTile_prefab = ecsWorld.prefab("SlateTile_prefab").is_a(Landscape::rockTile_prefab).is_a<SlateTile>().add<SlateTile>();
-    sandstoneTile_prefab = ecsWorld.prefab("SandstoneTile_prefab").is_a(Landscape::rockTile_prefab).is_a<SandstoneTile>().add<SandstoneTile>();
+    ecsWorld.component<GraniteTile>("GraniteTile");
+    ecsWorld.component<SlateTile>("SlateTile");
+    ecsWorld.component<SandstoneTile>("SandstoneTile");
+
+    graniteTile_prefab = ecsWorld.prefab("graniteTile").is_a(Landscape::rockTile_prefab).is_a<GraniteTile>().add<GraniteTile>();
+    slateTile_prefab = ecsWorld.prefab("slateTile").is_a(Landscape::rockTile_prefab).is_a<SlateTile>().add<SlateTile>();
+    sandstoneTile_prefab = ecsWorld.prefab("sandstoneTile").is_a(Landscape::rockTile_prefab).is_a<SandstoneTile>().add<SandstoneTile>();
 
     //    ecsWorld.component<GroundTypeEnum>("GroundTypeEnum")
     //        .constant("Granite", Granite)

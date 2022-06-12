@@ -1,8 +1,8 @@
 #include "FastNoise/FastNoise.h"
 #include "flecs.h"
 #include "flecs_modules/landscape/components.cpp"
-#include "flecs_modules/map/components.cpp"
 #include "flecs_modules/landscape/rockTile/components.cpp"
+#include "flecs_modules/map/components.cpp"
 #include "flecs_modules/net/components.cpp"
 #include "flecs_modules/tile/components.cpp"
 #include "flecs_modules/transform/components.cpp"
@@ -49,12 +49,10 @@ int main() {
 #endif
   flecs::world ecs;
   ecs.import <Transform::Componets>();
-  ecs.import <Map::Components>();
-    ecs.import <Map::Components>();
   ecs.import <Tile::Components>();
+  ecs.import <Map::Components>();
   ecs.import <Landscape::Components>();
   ecs.import <Net::Components>();
-  //
   //  ecs.import <Transform::Systems>();
   //  ecs.import <Landscape::Systems>();
   //  ecs.import <Tile::Systems>();
@@ -66,7 +64,7 @@ int main() {
   //  Landscape::init(ecs);
   //  Landscape::Rock::init(ecs);
   //
-  ecs.entity("Map").set<Map::Map>({3, 3});
+  //  ecs.entity("Map").set<Map::Map>({3, 3});
 
   //  Landscape::Rock::createTiles(ecs);
   //  auto qTile = ecs.query<
@@ -153,7 +151,6 @@ int main() {
   //
   //               .build();
 
-
   //  auto q = ecs.query_builder<Tile::Index2, Tile::Index2, Tile::Neighbours8>()
   ////                .term(flecs::IsA).obj(Tile::tile2_prefab)
   ////                .term(flecs::IsA, Tile::tile2_prefab)
@@ -163,26 +160,26 @@ int main() {
   //                  .obj(flecs::Wildcard).oper(flecs::Optional)
   //               .build();
 
-//  auto r = ecs.rule_builder()
-//           .term<Tile::ConnectsToLeftNode>().obj().var("nodeVar")
-//           .term<Tile::ConnectsToRightNode>().obj().var("nodeVar")
-//           .build();
+  //  auto r = ecs.rule_builder()
+  //           .term<Tile::ConnectsToLeftNode>().obj().var("nodeVar")
+  //           .term<Tile::ConnectsToRightNode>().obj().var("nodeVar")
+  //           .build();
 
-//  auto r = ecs.rule_builder<Tile::Index2>()
-////      .term<Tile::Index2>()
-////      .term<Tile::Index>()
-//      .term<Tile::ConnectsToRightNode>().obj().var("X")
-//      .build();
+  //  auto r = ecs.rule_builder<Tile::Index2>()
+  ////      .term<Tile::Index2>()
+  ////      .term<Tile::Index>()
+  //      .term<Tile::ConnectsToRightNode>().obj().var("X")
+  //      .build();
 
-//  int var = r.find_var("X");
+  //  int var = r.find_var("X");
   //  auto q = ecs.query_builder<Tile::Index2, Tile::Index2, Tile::Neighbours8>()
-//               //               .term("(Tile.Components.ConnectsToRightNode, $NodeVar)")
-//               //               .term("(Tile.Components.ConnectsToLeftNode, $NodeVar)")
-//               .term(flecs::IsA, Tile::tile2_prefab)
-//               .arg(2).subj<Tile::ConnectsToLeftNode>().obj(flecs::Wildcard)
-//               //                .term(flecs::IsA, Tile::tile2_prefab)
-//               //           .term("(Tile.Components.ConnectsToRightNode, *)")
-//               .build();
+  //               //               .term("(Tile.Components.ConnectsToRightNode, $NodeVar)")
+  //               //               .term("(Tile.Components.ConnectsToLeftNode, $NodeVar)")
+  //               .term(flecs::IsA, Tile::tile2_prefab)
+  //               .arg(2).subj<Tile::ConnectsToLeftNode>().obj(flecs::Wildcard)
+  //               //                .term(flecs::IsA, Tile::tile2_prefab)
+  //               //           .term("(Tile.Components.ConnectsToRightNode, *)")
+  //               .build();
 
   auto q = ecs.query_builder<Tile::Index2, Tile::Index2>()
                .build();
@@ -204,14 +201,14 @@ int main() {
   std::cout << queryJson.dump(2) << std::endl;
 
   // Iterate the rule
-//  r.each([&](flecs::iter& it, size_t index, Tile::Index2 index2) {
-//    auto name = it.entity(index).name().c_str();
-//    auto varName = it.get_var(var).name().c_str();
-//    std::cout
-//        << it.entity(index).name()
-//        << " lives in " << it.get_var(var).name()
-//        << "\n";
-//  });
+  //  r.each([&](flecs::iter& it, size_t index, Tile::Index2 index2) {
+  //    auto name = it.entity(index).name().c_str();
+  //    auto varName = it.get_var(var).name().c_str();
+  //    std::cout
+  //        << it.entity(index).name()
+  //        << " lives in " << it.get_var(var).name()
+  //        << "\n";
+  //  });
 
   std::cout << "" << std::endl;
   //  flecs::iter_to_json_desc_t descIter = {};

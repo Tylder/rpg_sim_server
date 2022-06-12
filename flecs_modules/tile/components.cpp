@@ -36,14 +36,14 @@ struct ConnectsToNode {
   std::string type;
 };// links to other tiles that are connected somehow;
 
-struct ConnectsToTopNode : ConnectsToNode{};
-struct ConnectsToTopRightNode : ConnectsToNode{};
-struct ConnectsToRightNode : ConnectsToNode{};
-struct ConnectsToBottomRightNode : ConnectsToNode{};
-struct ConnectsToBottomNode : ConnectsToNode{};
-struct ConnectsToBottomLeftNode : ConnectsToNode{};
-struct ConnectsToLeftNode : ConnectsToNode{};
-struct ConnectsToTopLeftNode : ConnectsToNode{};
+struct ConnectsToTopNode : ConnectsToNode {};
+struct ConnectsToTopRightNode : ConnectsToNode {};
+struct ConnectsToRightNode : ConnectsToNode {};
+struct ConnectsToBottomRightNode : ConnectsToNode {};
+struct ConnectsToBottomNode : ConnectsToNode {};
+struct ConnectsToBottomLeftNode : ConnectsToNode {};
+struct ConnectsToLeftNode : ConnectsToNode {};
+struct ConnectsToTopLeftNode : ConnectsToNode {};
 
 struct NeighbourNode {
   //  NeighbourTypeEnum type;
@@ -70,11 +70,12 @@ struct Components {
 
   Components(flecs::world &ecsWorld) {
     ecsWorld.module<Components>();
+    ecsWorld.import <Transform::Componets>();
 
     // https://flecs.docsforge.com/master/query-manual/#transitivity
     //    ecsWorld.component<TileType>().add(flecs::Transitive);// if 'x' is 'y' and 'y' is 'a' then 'x' == 'a'
 
-    ecsWorld.component<Tile>("Tile");
+    ecsWorld.component<Tile>("Tile").add(flecs::Tag);
     ecsWorld.component<Tile2>("Tile2").is_a<Tile>();
 
     ecsWorld.component<Index>("Index")
@@ -127,11 +128,10 @@ struct Components {
     //        .add<Tile>()
     //        .set<Transform::Size2<>>({1.0, 1.0});
 
-    tile_prefab = ecsWorld.prefab("Tile")
-                  .add<Tile>();
+    tile_prefab = ecsWorld.prefab("tile")
+                      .is_a<Tile>();
 
-    tile2_prefab = ecsWorld.prefab("Tile2")
-                       .is_a<Tile>()
+    tile2_prefab = ecsWorld.prefab("tile2")
                        .is_a<Tile2>()
                        .override<Transform::Position2<>>()
                        .override<Index>()

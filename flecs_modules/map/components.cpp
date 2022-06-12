@@ -20,10 +20,9 @@ struct Components {
     ecsWorld.module<Components>();
 
     ecsWorld.component<Map>().add<Map>();//  singleton
-//    map = ecsWorld.entity<Map>("Map");
-
+    //    map = ecsWorld.entity<Map>("Map");
   }
 };
-}
+}// namespace Map
 
-#endif // RPG_SIM_SERVER_MAP_COMPONENTS_H
+#endif// RPG_SIM_SERVER_MAP_COMPONENTS_H
