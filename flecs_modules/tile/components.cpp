@@ -11,14 +11,14 @@
 namespace Tile {
 
 enum NeighbourTypeEnum {
-  Top,
-  TopRight,
-  Right,
-  BottomRight,
-  Bottom,
-  BottomLeft,
-  Left,
-  TopLeft,
+  Top = 1,
+  TopRight = 2,
+  Right = 3,
+  BottomRight = 4,
+  Bottom = 5,
+  BottomLeft = 6,
+  Left = 7,
+  TopLeft = 8,
 };
 
 struct Neighbours8 {
@@ -75,17 +75,17 @@ struct Components {
     // https://flecs.docsforge.com/master/query-manual/#transitivity
     //    ecsWorld.component<TileType>().add(flecs::Transitive);// if 'x' is 'y' and 'y' is 'a' then 'x' == 'a'
 
-    ecsWorld.component<Tile>("Tile").add(flecs::Tag);
-    ecsWorld.component<Tile2>("Tile2").is_a<Tile>();
+    ecsWorld.component<Tile>().add(flecs::Tag);
+    ecsWorld.component<Tile2>().is_a<Tile>();
 
-    ecsWorld.component<Index>("Index")
+    ecsWorld.component<Index>()
         .member(flecs::I32, "value");
 
-    ecsWorld.component<Index2>("Index2")
+    ecsWorld.component<Index2>()
         .member(flecs::I32, "x")
         .member(flecs::I32, "y");
 
-    ecsWorld.component<Neighbours8>("Neighbours8")
+    ecsWorld.component<Neighbours8>()
         .member(flecs::Entity, "top")
         .member(flecs::Entity, "topRight")
         .member(flecs::Entity, "right")
@@ -95,27 +95,27 @@ struct Components {
         .member(flecs::Entity, "left")
         .member(flecs::Entity, "topLeft");
 
-    ecsWorld.component<ConnectsToNode>("ConnectsToNode");
-    ecsWorld.component<ConnectsToTopNode>("ConnectsToTopNode").is_a<ConnectsToNode>();
-    ecsWorld.component<ConnectsToTopRightNode>("ConnectsToTopRightNode").is_a<ConnectsToNode>();
-    ecsWorld.component<ConnectsToRightNode>("ConnectsToRightNode").is_a<ConnectsToNode>();
-    ecsWorld.component<ConnectsToBottomRightNode>("ConnectsToBottomRightNode").is_a<ConnectsToNode>();
-    ecsWorld.component<ConnectsToBottomNode>("ConnectsToBottomNode").is_a<ConnectsToNode>();
-    ecsWorld.component<ConnectsToBottomLeftNode>("ConnectsToBottomLeftNode").is_a<ConnectsToNode>();
-    ecsWorld.component<ConnectsToLeftNode>("ConnectsToLeftNode").is_a<ConnectsToNode>();
-    ecsWorld.component<ConnectsToTopLeftNode>("ConnectsToTopLeftNode").is_a<ConnectsToNode>();
+    ecsWorld.component<ConnectsToNode>();
+    ecsWorld.component<ConnectsToTopNode>().is_a<ConnectsToNode>();
+    ecsWorld.component<ConnectsToTopRightNode>().is_a<ConnectsToNode>();
+    ecsWorld.component<ConnectsToRightNode>().is_a<ConnectsToNode>();
+    ecsWorld.component<ConnectsToBottomRightNode>().is_a<ConnectsToNode>();
+    ecsWorld.component<ConnectsToBottomNode>().is_a<ConnectsToNode>();
+    ecsWorld.component<ConnectsToBottomLeftNode>().is_a<ConnectsToNode>();
+    ecsWorld.component<ConnectsToLeftNode>().is_a<ConnectsToNode>();
+    ecsWorld.component<ConnectsToTopLeftNode>().is_a<ConnectsToNode>();
 
-    //    ecsWorld.component<NeighbourTypeEnum>()
-    //        .constant("Top", Top)
-    //        .constant("TopRight", TopRight)
-    //        .constant("Right", Right)
-    //        .constant("BottomRight", BottomRight)
-    //        .constant("Bottom", Bottom)
-    //        .constant("BottomLeft", BottomLeft)
-    //        .constant("Left", Left)
-    //        .constant("TopLeft", TopLeft);
+//        ecsWorld.component<NeighbourTypeEnum>()
+//            .constant("Top", Top)
+//            .constant("TopRight", TopRight)
+//            .constant("Right", Right)
+//            .constant("BottomRight", BottomRight)
+//            .constant("Bottom", Bottom)
+//            .constant("BottomLeft", BottomLeft)
+//            .constant("Left", Left)
+//            .constant("TopLeft", TopLeft);
 
-    ecsWorld.component<NeighbourNode>("NeighbourNode")
+    ecsWorld.component<NeighbourNode>()
         //        .member<NeighbourTypeEnum>("type")
         .member(flecs::Entity, "node")
         .is_a<ConnectsToNode>();

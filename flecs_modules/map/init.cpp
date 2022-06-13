@@ -15,17 +15,6 @@ namespace Map {
 struct Inits {
   Inits(flecs::world &ecsWorld) {
     ecsWorld.module<Inits>();
-
-    ecsWorld.observer<Map>()
-      .event(flecs::OnAdd)
-      .each([&](flecs::entity, Map& map) {
-        Landscape::createTiles(ecsWorld, map.width, map.height);
-//        Landscape::createTiles(ecsWorld, map.width, map.height);
-
-      });
-
-
-
   }
 };
 }

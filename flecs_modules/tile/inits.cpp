@@ -18,8 +18,6 @@ namespace Tile {
 
 void setNeighbourNode(flecs::entity &node, NeighbourTypeEnum type, flecs::entity_view neighbourNode, Neighbours8 &neighbours) {
 
-  //  node.set<NeighbourNode>({type, neighbourNode});
-  //  node.set<NeighbourNode, NeighbourTypeEnum::Right>({neighbourNode});
   node.add<ConnectsToNode>(neighbourNode);
 
   switch (type) {
@@ -32,29 +30,24 @@ void setNeighbourNode(flecs::entity &node, NeighbourTypeEnum type, flecs::entity
     case TopRight: {
       node.add(NeighbourTypeEnum::TopRight, neighbourNode);
       node.add<ConnectsToTopRightNode>(neighbourNode);
-      //      node.set<NeighbourNode, NeighbourTypeEnum::TopRight>({neighbourNode});
       neighbours.topRight = neighbourNode;
       break;
     }
     case Right: {
       node.add(NeighbourTypeEnum::Right, neighbourNode);
       node.add<ConnectsToRightNode>(neighbourNode);
-
-      //      node.set<NeighbourNode, NeighbourTypeEnum::Right>({neighbourNode});
       neighbours.right = neighbourNode;
       break;
     }
     case BottomRight: {
       node.add(NeighbourTypeEnum::BottomRight, neighbourNode);
       node.add<ConnectsToBottomRightNode>(neighbourNode);
-      //      node.set<NeighbourNode, NeighbourTypeEnum::BottomRight>({neighbourNode});
       neighbours.bottomRight = neighbourNode;
       break;
     }
     case Bottom: {
       node.add(NeighbourTypeEnum::Bottom, neighbourNode);
       node.add<ConnectsToBottomNode>(neighbourNode);
-      //      node.set<NeighbourNode, NeighbourTypeEnum::Bottom>({neighbourNode});
       neighbours.bottom = neighbourNode;
       break;
     }
@@ -68,14 +61,12 @@ void setNeighbourNode(flecs::entity &node, NeighbourTypeEnum type, flecs::entity
     case Left: {
       node.add(NeighbourTypeEnum::Left, neighbourNode);
       node.add<ConnectsToLeftNode>(neighbourNode);
-      //      node.set<NeighbourNode, NeighbourTypeEnum::Left>({neighbourNode});
       neighbours.left = neighbourNode;
       break;
     }
     case TopLeft: {
       node.add(NeighbourTypeEnum::TopLeft, neighbourNode);
       node.add<ConnectsToTopLeftNode>(neighbourNode);
-      //      node.set<NeighbourNode, NeighbourTypeEnum::TopLeft>({neighbourNode});
       neighbours.topLeft = neighbourNode;
       break;
     }

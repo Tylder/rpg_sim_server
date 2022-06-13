@@ -13,14 +13,14 @@ struct Map {
   uint16_t width, height;
 };
 
-static flecs::entity map;
+static flecs::entity map; // singleton
 
 struct Components {
   Components(flecs::world &ecsWorld) {
     ecsWorld.module<Components>();
 
     ecsWorld.component<Map>().add<Map>();//  singleton
-    //    map = ecsWorld.entity<Map>("Map");
+    map = ecsWorld.entity<Map>("map");
   }
 };
 }// namespace Map

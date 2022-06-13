@@ -20,13 +20,18 @@ namespace Landscape::Rock {
 std::vector<flecs::entity_view> createTiles(flecs::world &ecsWorld) {
   //  auto f = ecsWorld.filter<const LandscapeTile>();
   std::vector<flecs::entity_view> landscapeTiles{};
-  Landscape::landscapeTileQuery.iter([&](flecs::iter &it, const LandscapeTile *t) {
+//  Landscape::landscapeTileQuery.iter([&](flecs::iter &it, const LandscapeTile *t) {
+  ecsWorld.filter<LandscapeTile>().iter([&](flecs::iter &it, LandscapeTile *t) {
     for (auto i : it) {
       landscapeTiles.emplace_back(it.entity(i));
     }
   });
 
-  std::vector<float> noiseOutput(16 * 16 * 16);
+  auto map = Map::map.get<Map::Map>();
+
+  const auto map2 = ecsWorld.get<Map::Map>();
+
+  std::vector<float> noiseOutput(map->width *map->height);
 
   for (auto tile : landscapeTiles) {
     std::string name = "GroundTile - x: " + std::to_string(tile.get<Tile::Index2>()->x) + ", y: " + std::to_string(tile.get<Tile::Index2>()->y);

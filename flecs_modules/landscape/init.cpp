@@ -31,7 +31,7 @@ std::vector<flecs::entity_view> getTiles(flecs::world &ecsWorld) {
 std::vector<flecs::entity_view> createTiles(flecs::world &ecsWorld, size_t width, size_t height) {
 //  assert(landscapeTileBase_Prefab);
 
-  return Tile::createTilesWith8Neighbours(ecsWorld, Landscape::landscapeTile_prefab, "LandscapeTile", width, height);
+  return Tile::createTilesWith8Neighbours(ecsWorld, Landscape::landscapeTile_prefab, "landscapeTile", width, height);
 }
 
 void init(flecs::world &ecsWorld) {

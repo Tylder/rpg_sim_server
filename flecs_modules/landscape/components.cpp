@@ -34,7 +34,7 @@ static flecs::entity grassTile_prefab;
 static flecs::entity waterTile_prefab;
 
 // QUERIES
-static flecs::query<LandscapeTile> landscapeTileQuery;
+static flecs::query<const LandscapeTile> landscapeTileQuery;
 
 struct Components {
 
@@ -42,16 +42,16 @@ struct Components {
     ecsWorld.module<Components>();
     ecsWorld.import <Map::Components>();
 
-    ecsWorld.component<LandscapeTile>("LandscapeTile").add(flecs::Tag);
-    ecsWorld.component<RockTile>("RockTile").add(flecs::Tag);
-    ecsWorld.component<DirtTile>("DirtTile").add(flecs::Tag);
-    ecsWorld.component<GrassTile>("GrassTile").add(flecs::Tag);
-    ecsWorld.component<WaterTile>("WaterTile").add(flecs::Tag);
+    ecsWorld.component<LandscapeTile>().add(flecs::Tag);
+    ecsWorld.component<RockTile>().add(flecs::Tag);
+    ecsWorld.component<DirtTile>().add(flecs::Tag);
+    ecsWorld.component<GrassTile>().add(flecs::Tag);
+    ecsWorld.component<WaterTile>().add(flecs::Tag);
 
-    ecsWorld.component<Depth>("Depth")
+    ecsWorld.component<Depth>()
         .member(flecs::U8, "value");
 
-    ecsWorld.component<Coverage>("Coverage")
+    ecsWorld.component<Coverage>()
         .member(flecs::U8, "value");
 
     ecsWorld.component<LandscapeTile>();
@@ -61,9 +61,9 @@ struct Components {
     ecsWorld.component<WaterTile>();
 
     landscapeTile_prefab = ecsWorld.prefab("landscapeTile")
-                               //                               .child_of(Map::map)// deletes all landscape tiles on delete of map
+                               .child_of(Map::map)// deletes all landscape tiles on delete of map
                                .is_a(Tile::tile2_prefab)
-                               .is_a<LandscapeTile>()
+//                               .is_a<LandscapeTile>()
                                .add<LandscapeTile>()
                                .set<Transform::Size2<>>({1.0, 1.0})// hard coded size
                                .override<Tile::Neighbours8>();
@@ -73,7 +73,7 @@ struct Components {
     grassTile_prefab = ecsWorld.prefab("grassTile").is_a(landscapeTile_prefab).is_a<GrassTile>().add<GrassTile>();
     waterTile_prefab = ecsWorld.prefab("waterTile").is_a(landscapeTile_prefab).is_a<WaterTile>().add<WaterTile>();
 
-    landscapeTileQuery = ecsWorld.query<LandscapeTile>();
+    landscapeTileQuery = ecsWorld.query<const LandscapeTile>();
   }
 };
 }// namespace Landscape

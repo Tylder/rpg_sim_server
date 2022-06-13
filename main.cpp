@@ -10,6 +10,7 @@
 #include "flecs_modules/landscape/init.cpp"
 #include "flecs_modules/landscape/rockTile/init.cpp"
 
+#include "flecs_modules/map/systems.cpp"
 #include "flecs_modules/landscape/rockTile/systems.cpp"
 #include "flecs_modules/landscape/systems.cpp"
 #include "flecs_modules/tile/systems.cpp"
@@ -53,6 +54,9 @@ int main() {
   ecs.import <Map::Components>();
   ecs.import <Landscape::Components>();
   ecs.import <Net::Components>();
+
+
+  ecs.import <Map::Systems>();
   //  ecs.import <Transform::Systems>();
   //  ecs.import <Landscape::Systems>();
   //  ecs.import <Tile::Systems>();
@@ -64,7 +68,11 @@ int main() {
   //  Landscape::init(ecs);
   //  Landscape::Rock::init(ecs);
   //
-  //  ecs.entity("Map").set<Map::Map>({3, 3});
+//  Map::map = ecs.entity("Map").set<Map::Map>({3, 3});
+
+  ecs.set<Map::Map>({3, 3}); // singleton
+ // Get singleton component
+  auto map = ecs.get<Map::Map>();
 
   //  Landscape::Rock::createTiles(ecs);
   //  auto qTile = ecs.query<
@@ -181,7 +189,7 @@ int main() {
   //               //           .term("(Tile.Components.ConnectsToRightNode, *)")
   //               .build();
 
-  auto q = ecs.query_builder<Tile::Index2, Tile::Index2>()
+  auto q = ecs.query_builder<Tile::Index2, Tile::Neighbours8>()
                .build();
 
   // Serialize query to JSON. Note that this works for any iterable object,

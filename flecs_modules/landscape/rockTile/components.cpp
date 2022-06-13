@@ -26,9 +26,9 @@ struct Components {
     ecsWorld.import <Map::Components>();
     ecsWorld.import <Landscape::Components>();
 
-    ecsWorld.component<GraniteTile>("GraniteTile");
-    ecsWorld.component<SlateTile>("SlateTile");
-    ecsWorld.component<SandstoneTile>("SandstoneTile");
+    ecsWorld.component<GraniteTile>();
+    ecsWorld.component<SlateTile>();
+    ecsWorld.component<SandstoneTile>();
 
     graniteTile_prefab = ecsWorld.prefab("graniteTile").is_a(Landscape::rockTile_prefab).is_a<GraniteTile>().add<GraniteTile>();
     slateTile_prefab = ecsWorld.prefab("slateTile").is_a(Landscape::rockTile_prefab).is_a<SlateTile>().add<SlateTile>();
