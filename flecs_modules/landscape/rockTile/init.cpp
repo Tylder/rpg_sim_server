@@ -2,8 +2,8 @@
 // Created by Anon on 5/26/2022.
 //
 
-#ifndef RPG_SIM_SERVER_LANDSCAPE_GROUND_INITS_H
-#define RPG_SIM_SERVER_LANDSCAPE_GROUND_INITS_H
+#ifndef RPG_SIM_SERVER_LANDSCAPE_GROUND_INITS
+#define RPG_SIM_SERVER_LANDSCAPE_GROUND_INITS
 
 #include "flecs.h"
 #include "flecs_modules/landscape/components.cpp"
@@ -17,10 +17,16 @@
 
 namespace Landscape::Rock {
 
+void updateNoise()
+
 std::vector<flecs::entity_view> createTiles(flecs::world &ecsWorld) {
   //  auto f = ecsWorld.filter<const LandscapeTile>();
   std::vector<flecs::entity_view> landscapeTiles{};
-//  Landscape::landscapeTileQuery.iter([&](flecs::iter &it, const LandscapeTile *t) {
+
+  auto json = landscapeTileQuery.iter().to_json();
+  //  auto json = ecsWorld.query<const LandscapeTile>().iter().to_json().c_str();
+
+  //  Landscape::landscapeTileQuery.iter([&](flecs::iter &it, const LandscapeTile *t) {
   ecsWorld.filter<LandscapeTile>().iter([&](flecs::iter &it, LandscapeTile *t) {
     for (auto i : it) {
       landscapeTiles.emplace_back(it.entity(i));
@@ -31,7 +37,8 @@ std::vector<flecs::entity_view> createTiles(flecs::world &ecsWorld) {
 
   const auto map2 = ecsWorld.get<Map::Map>();
 
-  std::vector<float> noiseOutput(map->width *map->height);
+  noise.reserve(map->height * map->width);
+
 
   for (auto tile : landscapeTiles) {
     std::string name = "GroundTile - x: " + std::to_string(tile.get<Tile::Index2>()->x) + ", y: " + std::to_string(tile.get<Tile::Index2>()->y);
@@ -48,4 +55,4 @@ std::vector<flecs::entity_view> createTiles(flecs::world &ecsWorld) {
 
 }// namespace Landscape::Rock
 
-#endif// RPG_SIM_SERVER_LANDSCAPE_GROUND_INITS_H
+#endif// RPG_SIM_SERVER_LANDSCAPE_GROUND_INITS

@@ -95,7 +95,7 @@ target_link_libraries(flecs_map PUBLIC nlohmann_json flecs_static FastNoise flec
 add_library(flecs_landscape STATIC
         ${FLECS_MODULE_DIR}/landscape/components.cpp
         ${FLECS_MODULE_DIR}/landscape/init.cpp
-        ${FLECS_MODULE_DIR}/landscape/systems.cpp)
+        ${FLECS_MODULE_DIR}/landscape/systems.cpp flecs_modules/landscape/systems.h)
 
 target_link_libraries(flecs_landscape PUBLIC nlohmann_json csv flecs_static FastNoise flecs_transform flecs_tile flecs_net flecs_map)
 
@@ -103,7 +103,7 @@ target_link_libraries(flecs_landscape PUBLIC nlohmann_json csv flecs_static Fast
 add_library(flecs_landscape_rock STATIC
         ${FLECS_MODULE_DIR}/landscape/rockTile/components.cpp
         ${FLECS_MODULE_DIR}/landscape/rockTile/init.cpp
-        ${FLECS_MODULE_DIR}/landscape/rockTile/systems.cpp)
+        ${FLECS_MODULE_DIR}/landscape/rockTile/systems.cpp flecs_modules/landscape/rockTile/rockTile.cpp flecs_modules/landscape/rockTile/rockTile.h)
 
 target_link_libraries(flecs_landscape_rock PUBLIC nlohmann_json csv flecs_static flecs_landscape flecs_map)
 

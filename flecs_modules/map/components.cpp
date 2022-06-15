@@ -9,11 +9,19 @@
 
 namespace Map {
 
-struct Map {
-  uint16_t width, height;
+struct RockTileConfig {
+  uint8_t granitePriority; /* the higher, the more prominent, 0-255, 0 means not used */
+  uint8_t slatePriority;
+  uint8_t sandstonePriority;
 };
 
-static flecs::entity map; // singleton
+struct Map {
+  int seed;
+  uint16_t width, height;
+  RockTileConfig rockTileConfig;
+};
+
+static flecs::entity map;// singleton
 
 struct Components {
   Components(flecs::world &ecsWorld) {

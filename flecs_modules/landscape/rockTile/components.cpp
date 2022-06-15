@@ -2,12 +2,13 @@
 // Created by Anon on 5/26/2022.
 //
 
-#ifndef RPG_SIM_SERVER_LANDSCAPE_GROUND_COMPONENTS_H
-#define RPG_SIM_SERVER_LANDSCAPE_GROUND_COMPONENTS_H
+#ifndef RPG_SIM_SERVER_LANDSCAPE_GROUND_COMPONENTS
+#define RPG_SIM_SERVER_LANDSCAPE_GROUND_COMPONENTS
 
 #include "flecs_modules/landscape/components.cpp"
 #include "flecs.h"
 #include <string>
+#include <vector>
 
 namespace Landscape::Rock {
 
@@ -53,4 +54,4 @@ struct Components {
 };
 }// namespace Landscape::Rock
 
-#endif// RPG_SIM_SERVER_LANDSCAPE_GROUND_COMPONENTS_H
+#endif// RPG_SIM_SERVER_LANDSCAPE_GROUND_COMPONENTS

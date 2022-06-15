@@ -19,6 +19,8 @@ namespace Landscape {
 //static flecs::query<const LandscapeTile> landscapeTilesBasic_Query;
 //static flecs::query<const LandscapeTile, const Tile::Index, const Tile::Index2> landscapeTiles_Query;
 
+
+
 std::vector<flecs::entity_view> getTiles(flecs::world &ecsWorld) {
   std::vector<flecs::entity_view> landscapeTiles{};
   Landscape::landscapeTileQuery.iter([&](flecs::iter &it, const LandscapeTile *t) {
@@ -28,7 +30,7 @@ std::vector<flecs::entity_view> getTiles(flecs::world &ecsWorld) {
   });
 }
 
-std::vector<flecs::entity_view> createTiles(flecs::world &ecsWorld, size_t width, size_t height) {
+std::vector<flecs::entity_view> createTiles(flecs::world &ecsWorld, uint16_t width, uint16_t height) {
 //  assert(landscapeTileBase_Prefab);
 
   return Tile::createTilesWith8Neighbours(ecsWorld, Landscape::landscapeTile_prefab, "landscapeTile", width, height);

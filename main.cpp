@@ -9,10 +9,11 @@
 
 #include "flecs_modules/landscape/init.cpp"
 #include "flecs_modules/landscape/rockTile/init.cpp"
+#include "flecs_modules/landscape/rockTile/systems.cpp"
+
+#include "flecs_modules/landscape/systems.cpp"
 
 #include "flecs_modules/map/systems.cpp"
-#include "flecs_modules/landscape/rockTile/systems.cpp"
-#include "flecs_modules/landscape/systems.cpp"
 #include "flecs_modules/tile/systems.cpp"
 #include "flecs_modules/transform/systems.cpp"
 #include "nlohmann/json.hpp"
@@ -55,11 +56,14 @@ int main() {
   ecs.import <Landscape::Components>();
   ecs.import <Net::Components>();
 
-
   ecs.import <Map::Systems>();
-  //  ecs.import <Transform::Systems>();
-  //  ecs.import <Landscape::Systems>();
-  //  ecs.import <Tile::Systems>();
+
+  ecs.import <Landscape::Systems>();
+  ecs.import <Landscape::Rock::Systems>();
+
+  //  ecs.import <Transform::>();
+  //  ecs.import <Landscape::>();
+  //  ecs.import <Tile::>();
 
   //      ecs.app().enable_rest().run();
 
@@ -68,10 +72,10 @@ int main() {
   //  Landscape::init(ecs);
   //  Landscape::Rock::init(ecs);
   //
-//  Map::map = ecs.entity("Map").set<Map::Map>({3, 3});
+  //  Map::map = ecs.entity("Map").set<Map::Map>({3, 3});
 
-  ecs.set<Map::Map>({3, 3}); // singleton
- // Get singleton component
+  ecs.set<Map::Map>({1337, 3, 3, {100, 30, 0}});// singleton
+                                                // Get singleton component
   auto map = ecs.get<Map::Map>();
 
   //  Landscape::Rock::createTiles(ecs);
@@ -189,8 +193,10 @@ int main() {
   //               //           .term("(Tile.Components.ConnectsToRightNode, *)")
   //               .build();
 
-  auto q = ecs.query_builder<Tile::Index2, Tile::Neighbours8>()
-               .build();
+  //  auto q = ecs.query_builder<Tile::Index2, Tile::Neighbours8>()
+  //               .build();
+
+  auto q = Landscape::landscapeTileQuery;
 
   // Serialize query to JSON. Note that this works for any iterable object,
   // including filters & rules.
@@ -219,6 +225,7 @@ int main() {
   //  });
 
   std::cout << "" << std::endl;
+  //  Landscape::Rock::createTiles(ecs);
   //  flecs::iter_to_json_desc_t descIter = {};
   //  //  descIter.serialize_entities = true;
   //  //  descIter.serialize_values = true;
