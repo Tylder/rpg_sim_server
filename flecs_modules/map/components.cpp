@@ -6,6 +6,7 @@
 #define RPG_SIM_SERVER_MAP_COMPONENTS_H
 
 #include "flecs.h"
+#include "flecs_modules/landscape/components.cpp"
 
 namespace Map {
 
@@ -26,6 +27,7 @@ static flecs::entity map;// singleton
 struct Components {
   Components(flecs::world &ecsWorld) {
     ecsWorld.module<Components>();
+    ecsWorld.module<Landscape::Components>();
 
     ecsWorld.component<Map>().add<Map>();//  singleton
     map = ecsWorld.entity<Map>("map");

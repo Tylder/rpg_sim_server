@@ -2,8 +2,8 @@
 // Created by Anon on 5/26/2022.
 //
 
-#ifndef RPG_SIM_SERVER_LANDSCAPE_GROUND_INITS
-#define RPG_SIM_SERVER_LANDSCAPE_GROUND_INITS
+#ifndef RPG_SIM_SERVER_LANDSCAPE_ROCK_INITS
+#define RPG_SIM_SERVER_LANDSCAPE_ROCK_INITS
 
 #include "flecs.h"
 #include "flecs_modules/landscape/components.cpp"
@@ -55,4 +55,4 @@ std::vector<flecs::entity_view> createTiles(flecs::world &ecsWorld) {
 
 }// namespace Landscape::Rock
 
-#endif// RPG_SIM_SERVER_LANDSCAPE_GROUND_INITS
+#endif// RPG_SIM_SERVER_LANDSCAPE_ROCK_INITS

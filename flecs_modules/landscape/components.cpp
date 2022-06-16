@@ -9,6 +9,8 @@
 #include "flecs.h"
 #include "flecs_modules/map/components.cpp"
 #include "flecs_modules/transform/components.cpp"
+#include "flecs_modules/landscape/rockTile/components.cpp"
+#include "flecs_modules/landscape/rockTile/systems.cpp"
 
 namespace Landscape {
 
@@ -40,7 +42,7 @@ struct Components {
 
   Components(flecs::world &ecsWorld) {
     ecsWorld.module<Components>();
-    ecsWorld.import <Map::Components>();
+    ecsWorld.import<Landscape::Rock::Components>();
 
     ecsWorld.component<LandscapeTile>().add(flecs::Tag);
     ecsWorld.component<RockTile>().add(flecs::Tag);

@@ -106,11 +106,7 @@ add_library(flecs_landscape_rock STATIC
         ${FLECS_MODULE_DIR}/landscape/rockTile/systems.cpp flecs_modules/landscape/rockTile/rockTile.cpp flecs_modules/landscape/rockTile/rockTile.h)
 
 target_link_libraries(flecs_landscape_rock PUBLIC nlohmann_json csv flecs_static flecs_landscape flecs_map)
-
-#### MAP
-add_library(map STATIC
-        ${INC_DIR}/map/Map.cpp
-        ${INC_DIR}/map/Map.cpp)
+   
 
 target_link_libraries(map PUBLIC nlohmann_json csv flecs_static FastNoise flecs_transform flecs_tile flecs_net flecs_map)
 

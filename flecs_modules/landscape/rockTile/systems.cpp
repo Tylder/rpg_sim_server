@@ -2,8 +2,8 @@
 // Created by Anon on 5/26/2022.
 //
 
-#ifndef RPG_SIM_SERVER_LANDSCAPE_GROUND_SYSTEMS
-#define RPG_SIM_SERVER_LANDSCAPE_GROUND_SYSTEMS
+#ifndef RPG_SIM_SERVER_LANDSCAPE_ROCK_SYSTEMS
+#define RPG_SIM_SERVER_LANDSCAPE_ROCK_SYSTEMS
 
 #include "FastNoise/FastNoise.h"
 #include "flecs.h"
@@ -11,6 +11,9 @@
 #include "flecs_modules/landscape/rockTile/components.cpp"
 #include "flecs_modules/landscape/rockTile/init.cpp"
 #include <vector>
+#include "flecs_modules/landscape/components.cpp"
+#include "flecs_modules/landscape/rockTile/init.cpp"
+
 
 namespace Landscape::Rock {
 
@@ -27,11 +30,13 @@ struct Systems {
           createTiles(ecsWorld);
         });
 
-    //    auto landscapeTileBase = ecsWorld.entity()
-    //        .add<Tile>()
-    //        .set<Transform::Size2<>>({1.0, 1.0});
+    ecsWorld.observer<LandscapeTile>()
+        .event(flecs::OnSet)
+        .iter([&](flecs::iter &it, LandscapeTile*) {
+          createTiles(ecsWorld);
+        });
   }
 };
 }// namespace Landscape::Rock
 
-#endif// RPG_SIM_SERVER_LANDSCAPE_GROUND_SYSTEMS
+#endif// RPG_SIM_SERVER_LANDSCAPE_ROCK_SYSTEMS
